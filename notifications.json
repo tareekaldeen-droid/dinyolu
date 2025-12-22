@@ -1,10 +1,11 @@
 {
-  "id": 6,
+  "id": 7,
   "active": true,
+  "date": "2025-12-22 | 09:00 PM",
   "image": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=874,fit=crop/a5oqci6YCwpNHTpH/ouuo--o-c-uossoao3osso-o-oaosso--uo-r-1447-06-18-uu-10.02.13_74395aaa-mKdzlsh4hfyEOxmu.jpg",
   "message": {
-    "ar": "مرحباً بك! تم إضافة دعم الصور في الإشعارات. جرب التحديث الجديد الآن!",
-    "en": "Welcome! Image support added to notifications. Check it out!",
-    "tr": "Hoş geldiniz! Bildirimlere resim desteği eklendi. Şimdi kontrol edin!"
+    "ar": "مرحباً بكم! تم تحديث التطبيق وإضافة ميزة الإشعارات المصورة. استمتع بتجربة استخدام أفضل.",
+    "en": "Welcome! The app has been updated with image notifications. Enjoy a better experience.",
+    "tr": "Hoş geldiniz! Uygulama resimli bildirimlerle güncellendi. Daha iyi bir deneyimin tadını çıkarın."
   }
 }
