@@ -1,11 +1,11 @@
 {
-  "id": 9,
+  "id": 10,
   "active": true,
-  "date": "2025-12-23 | 08:30 PM",
+  "date": "2025-12-23 | 09:30 PM",
   "image": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=874,fit=crop/a5oqci6YCwpNHTpH/ouuo--o-c-uossoao3osso-o-oaosso--uo-r-1447-06-18-uu-10.02.13_74395aaa-mKdzlsh4hfyEOxmu.jpg",
   "message": {
-    "ar": "تحديث جديد! تم إضافة دعم الصور في الإشعارات مع تصميم عصري وجذاب.",
-    "en": "New Update! Added image support in notifications with a modern design.",
-    "tr": "Yeni Güncelleme! Bildirimlere modern bir tasarımla resim desteği eklendi."
+    "ar": "تحديث جديد! تم إصلاح مشكلة تغيير حجم الخط ونوعه، وإضافة دعم الصور للإشعارات.",
+    "en": "New Update! Fixed font size and type issues, and added image support for notifications.",
+    "tr": "Yeni Güncelleme! Yazı tipi boyutu ve türü sorunları giderildi ve bildirimler için resim desteği eklendi."
   }
 }
