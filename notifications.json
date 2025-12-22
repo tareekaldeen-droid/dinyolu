@@ -1,11 +1,10 @@
 {
-  "id": 5,
+  "id": 6,
   "active": true,
-  "image": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=874,fit=crop/a5oqci6YCwpNHTpH/ouuo--o-c-uossoao3osso-o-oaosso--uo-r-1447-06-18-uu-10.02.13_74395aaa-mKdzlsh4hfyEOxmu.jpg": {
-    "ar": "مرحباً بك ياحسن هدية من الله سبحانه وتعالى وتوفيق منه! تم إضافة دعم الصور في الإشعارات. جرب التحديث الجديد الآن!",
+  "image": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=874,fit=crop/a5oqci6YCwpNHTpH/ouuo--o-c-uossoao3osso-o-oaosso--uo-r-1447-06-18-uu-10.02.13_74395aaa-mKdzlsh4hfyEOxmu.jpg",
+  "message": {
+    "ar": "مرحباً بك! تم إضافة دعم الصور في الإشعارات. جرب التحديث الجديد الآن!",
     "en": "Welcome! Image support added to notifications. Check it out!",
     "tr": "Hoş geldiniz! Bildirimlere resim desteği eklendi. Şimdi kontrol edin!"
   }
 }
-
-
