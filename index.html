@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- 🚫 منع الترجمة التلقائية -->
 <html lang="ar" dir="rtl" translate="no" class="notranslate">
 <head>
     <meta charset="UTF-8">
@@ -19,7 +18,7 @@
     <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;800&family=Lateef&family=Tajawal:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <style>
         /* ============================================================ */
@@ -51,29 +50,20 @@
             --header-bg: linear-gradient(135deg, #0f221e, #051311);
         }
 
-        html[data-font-size="xs"] { --base-size: 13px; }
-        html[data-font-size="sm"] { --base-size: 14.5px; }
-        html[data-font-size="md"] { --base-size: 16px; }
-        html[data-font-size="lg"] { --base-size: 18px; }
-        html[data-font-size="xl"] { --base-size: 20px; }
-
         html, body {
             font-family: var(--app-font) !important;
             font-size: var(--base-size);
             transition: background-color 0.4s ease, color 0.3s ease;
             height: 100%;
             overflow-x: hidden;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
+            margin: 0; padding: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-bottom: calc(80px + var(--safe-bottom));
-            line-height: 1.7;
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { padding-bottom: calc(80px + var(--safe-bottom)); line-height: 1.7; }
         .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
 
         /* الهيدر */
@@ -84,7 +74,6 @@
             position: sticky; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.15); color: white;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.2rem; }
         .top-controls { display: flex; gap: 10px; align-items: center; }
@@ -99,14 +88,12 @@
         }
         .lang-select option { background: #333; color: white; }
 
-        /* البطاقات */
+        /* البطاقات والشبكة */
         .hero-card {
             background: linear-gradient(135deg, rgba(13, 124, 102, 0.1), rgba(13, 124, 102, 0.05));
             border: 1px solid var(--primary-color); border-radius: 24px; padding: 2rem; text-align: center; margin-bottom: 2rem;
         }
-        .app-logo {
-            width: 110px; height: 110px; background: white; border-radius: 50%; padding: 6px; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
+        .app-logo { width: 110px; height: 110px; background: white; border-radius: 50%; padding: 6px; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .app-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
@@ -114,7 +101,7 @@
 
         .menu-item {
             background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem 1rem;
-            text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; box-shadow: var(--shadow);
+            text-align: center; cursor: pointer; transition: transform 0.2s; box-shadow: var(--shadow);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .menu-item:active { transform: scale(0.95); }
@@ -158,11 +145,11 @@
         .settings-row { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
         .settings-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
         .label-text { display: block; margin-bottom: 10px; font-weight: bold; }
-        .font-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
-        .font-btn, .size-btn, .theme-btn { padding: 12px; border: 2px solid var(--border-color); background: var(--bg-color); border-radius: 12px; cursor: pointer; color: var(--text-color); font-size: 1rem; transition: 0.2s; }
-        .font-btn.active, .size-btn.active, .theme-btn.active { border-color: var(--primary-color); background: rgba(13, 124, 102, 0.1); color: var(--primary-color); font-weight: bold; }
+        .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; } 
+        .theme-btn, .size-btn, .font-btn { padding: 12px; border: 2px solid var(--border-color); background: var(--bg-color); border-radius: 12px; cursor: pointer; color: var(--text-color); font-size: 1rem; transition: 0.2s; }
+        .theme-btn.active, .size-btn.active, .font-btn.active { border-color: var(--primary-color); background: rgba(13, 124, 102, 0.1); color: var(--primary-color); font-weight: bold; }
         .size-controls { display: flex; gap: 5px; } .size-btn { flex: 1; }
-        .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; } .theme-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .font-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
 
         /* الشريط السفلي */
         .bottom-nav {
@@ -174,7 +161,7 @@
         .nav-link svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; }
 
         /* ============================================================ */
-        /* 🔔 نافذة الإشعارات العصرية (Modal) مع دعم الصور */
+        /* 🔔 نافذة الإشعارات (Modal) - التصميم الجديد */
         /* ============================================================ */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -187,28 +174,29 @@
             border-radius: 24px; padding: 1.5rem; text-align: center;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3); border: 1px solid var(--border-color);
             transform: scale(0.9); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            max-height: 90vh; overflow-y: auto; /* للتمرير في الشاشات الصغيرة */
+            max-height: 90vh; overflow-y: auto;
         }
         .modal-logo { width: 70px; height: 70px; margin: 0 auto 10px; background: white; border-radius: 50%; padding: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .modal-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
         
         .modal-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 5px; color: var(--primary-color); }
         
-        /* تنسيق التاريخ */
+        /* التاريخ والوقت */
         .modal-date {
             font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;
-            background: rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; display: inline-block;
+            background: rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; display: inline-block; font-weight: bold;
         }
 
-        /* تنسيق الصورة */
+        /* الصورة - حواف مكسورة/منحنية */
         .modal-image {
             width: 100%; height: auto; max-height: 250px; object-fit: cover;
             border-radius: 16px; margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            display: none; /* مخفية افتراضياً حتى يتم تحميل الرابط */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: none; /* مخفية حتى يتم تحميلها */
+            border: 2px solid var(--border-color);
         }
 
-        .modal-body { font-size: 1rem; color: var(--text-color); margin-bottom: 20px; line-height: 1.6; text-align: justify; text-align-last: center; }
+        .modal-body { font-size: 1rem; color: var(--text-color); margin-bottom: 20px; line-height: 1.6; }
         
         .modal-btn {
             background: var(--primary-color); color: white; border: none; padding: 12px 24px;
@@ -216,12 +204,10 @@
             box-shadow: 0 4px 15px rgba(13, 124, 102, 0.3);
         }
 
-        /* تنسيق قسم ما الجديد */
-        .news-card {
-            border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; background: var(--bg-color);
-        }
-        .news-image { width: 100%; border-radius: 12px; margin-bottom: 10px; display: none; }
-        .news-date { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px; display: block; }
+        /* قسم ما الجديد */
+        .news-card { border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; background: var(--bg-color); }
+        .news-image { width: 100%; border-radius: 12px; margin-bottom: 10px; display: none; border: 1px solid var(--border-color); }
+        .news-date { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px; display: block; font-weight: bold; }
 
         /* تعليمات iOS */
         .ios-instructions { text-align: right; margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary); }
@@ -230,7 +216,6 @@
 
         @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
     </style>
 </head>
 <body>
@@ -456,7 +441,7 @@
                 const data = await response.json();
                 currentNotifId = data.id;
 
-                // حفظ البيانات كاملة (نص + صورة + تاريخ)
+                // حفظ البيانات كاملة
                 localStorage.setItem('latest_news_data', JSON.stringify(data));
 
                 const dismissedId = localStorage.getItem('dismissed_notif_id');
@@ -479,14 +464,16 @@
             body.textContent = data.message[currentLang] || data.message['ar'];
             
             // عرض التاريخ
-            dateEl.textContent = data.date || '';
+            if(dateEl) dateEl.textContent = data.date || '';
             
             // عرض الصورة إذا وجدت
-            if (data.image && data.image.trim() !== "") {
-                imgEl.src = data.image;
-                imgEl.style.display = 'block';
-            } else {
-                imgEl.style.display = 'none';
+            if (imgEl) {
+                if (data.image && data.image.trim() !== "") {
+                    imgEl.src = data.image;
+                    imgEl.style.display = 'block';
+                } else {
+                    imgEl.style.display = 'none';
+                }
             }
 
             modal.style.display = 'flex';
@@ -510,14 +497,16 @@
             
             if (storedData) {
                 const data = JSON.parse(storedData);
-                textDiv.textContent = data.message[currentLang] || data.message['ar'];
-                dateDiv.textContent = data.date || '';
+                if(textDiv) textDiv.textContent = data.message[currentLang] || data.message['ar'];
+                if(dateDiv) dateDiv.textContent = data.date || '';
                 
-                if (data.image && data.image.trim() !== "") {
-                    imgDiv.src = data.image;
-                    imgDiv.style.display = 'block';
-                } else {
-                    imgDiv.style.display = 'none';
+                if (imgDiv) {
+                    if (data.image && data.image.trim() !== "") {
+                        imgDiv.src = data.image;
+                        imgDiv.style.display = 'block';
+                    } else {
+                        imgDiv.style.display = 'none';
+                    }
                 }
             }
         }
