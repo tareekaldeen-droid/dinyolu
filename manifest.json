@@ -1,0 +1,20 @@
+{
+  "name": "التطبيق الشامل",
+  "short_name": "الشامل",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0d7c66",
+  "theme_color": "#0d7c66",
+  "icons": [
+    {
+      "src": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=192,h=192,fit=crop/a5oqci6YCwpNHTpH/whatsapp-image-2025-12-19-at-11.11.04-am-fDCDqijtAhLk7CFm.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=512,h=512,fit=crop/a5oqci6YCwpNHTpH/whatsapp-image-2025-12-19-at-11.11.04-am-fDCDqijtAhLk7CFm.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
