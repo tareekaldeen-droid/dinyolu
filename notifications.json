@@ -1,5 +1,5 @@
 {
-  "id": 1,
+  "id": 2,
   "active": true,
   "message": {
     "ar": "مرحباً! هذا هو الإصدار الجديد. تم إضافة زر التثبيت وقسم ما الجديد.",
@@ -7,3 +7,4 @@
     "tr": "Merhaba! Yeni sürüm. Yükleme düğmesi ve Yenilikler bölümü eklendi."
   }
 }
+
