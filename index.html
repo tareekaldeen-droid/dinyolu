@@ -15,10 +15,10 @@
     <title>التطبيق الشامل | Ultimate App</title>
     <link rel="manifest" href="manifest.json">
     
-    <!-- الخطوط -->
+    <!-- تحميل الخطوط (تم إضافة جميع الأوزان لضمان العمل) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;800&family=Lateef&family=Tajawal:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         /* ============================================================ */
@@ -33,12 +33,12 @@
             --border-color: #dee2e6;
             --shadow: 0 4px 15px rgba(0,0,0,0.05);
             --header-bg: linear-gradient(135deg, #0d7c66, #084135);
-            --app-font: 'Cairo', sans-serif;
-            --base-size: 16px;
+            --app-font: 'Cairo', sans-serif; /* الخط الافتراضي */
             --safe-top: env(safe-area-inset-top);
             --safe-bottom: env(safe-area-inset-bottom);
         }
 
+        /* الوضع الليلي */
         [data-theme="dark"] {
             --primary-color: #4db6ac;
             --bg-color: #051311;
@@ -50,9 +50,17 @@
             --header-bg: linear-gradient(135deg, #0f221e, #051311);
         }
 
+        /* 🛠️ إصلاح حجم الخط (التحكم في Root Font Size) */
+        html { font-size: 16px; /* الحجم الافتراضي */ }
+        html[data-font-size="xs"] { font-size: 13px; }
+        html[data-font-size="sm"] { font-size: 14.5px; }
+        html[data-font-size="md"] { font-size: 16px; }
+        html[data-font-size="lg"] { font-size: 18px; }
+        html[data-font-size="xl"] { font-size: 20px; }
+
         html, body {
+            /* تطبيق الخط المتغير على كامل الموقع */
             font-family: var(--app-font) !important;
-            font-size: var(--base-size);
             transition: background-color 0.4s ease, color 0.3s ease;
             height: 100%;
             overflow-x: hidden;
@@ -161,7 +169,7 @@
         .nav-link svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; }
 
         /* ============================================================ */
-        /* 🔔 نافذة الإشعارات (Modal) - التصميم الجديد */
+        /* 🔔 نافذة الإشعارات (Modal) */
         /* ============================================================ */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
