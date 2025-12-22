@@ -174,39 +174,55 @@
         .nav-link svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; }
 
         /* ============================================================ */
-        /* 🔔 نافذة الإشعارات (Modal) */
+        /* 🔔 نافذة الإشعارات العصرية (Modal) مع دعم الصور */
         /* ============================================================ */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
             z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px;
             animation: fadeInOverlay 0.3s ease;
         }
         .modal-content {
             background: var(--card-bg); width: 100%; max-width: 400px;
-            border-radius: 24px; padding: 2rem; text-align: center;
+            border-radius: 24px; padding: 1.5rem; text-align: center;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3); border: 1px solid var(--border-color);
             transform: scale(0.9); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            max-height: 90vh; overflow-y: auto; /* للتمرير في الشاشات الصغيرة */
         }
-        .modal-logo { width: 80px; height: 80px; margin: 0 auto 1rem; background: white; border-radius: 50%; padding: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .modal-logo { width: 70px; height: 70px; margin: 0 auto 10px; background: white; border-radius: 50%; padding: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .modal-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
         
-        /* 🖼️ تنسيق صورة الإشعار الجديدة */
-        .modal-banner-img {
-            width: 100%; height: auto; max-height: 200px; object-fit: cover;
-            border-radius: 16px; margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            display: none; /* مخفية افتراضياً */
+        .modal-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 5px; color: var(--primary-color); }
+        
+        /* تنسيق التاريخ */
+        .modal-date {
+            font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;
+            background: rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; display: inline-block;
         }
 
-        .modal-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 0.5rem; color: var(--primary-color); }
-        .modal-body { font-size: 1rem; color: var(--text-color); margin-bottom: 2rem; line-height: 1.6; }
+        /* تنسيق الصورة */
+        .modal-image {
+            width: 100%; height: auto; max-height: 250px; object-fit: cover;
+            border-radius: 16px; margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: none; /* مخفية افتراضياً حتى يتم تحميل الرابط */
+        }
+
+        .modal-body { font-size: 1rem; color: var(--text-color); margin-bottom: 20px; line-height: 1.6; text-align: justify; text-align-last: center; }
+        
         .modal-btn {
             background: var(--primary-color); color: white; border: none; padding: 12px 24px;
             border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1rem;
             box-shadow: 0 4px 15px rgba(13, 124, 102, 0.3);
         }
-        
+
+        /* تنسيق قسم ما الجديد */
+        .news-card {
+            border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; background: var(--bg-color);
+        }
+        .news-image { width: 100%; border-radius: 12px; margin-bottom: 10px; display: none; }
+        .news-date { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px; display: block; }
+
         /* تعليمات iOS */
         .ios-instructions { text-align: right; margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary); }
         .ios-step { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
@@ -228,10 +244,14 @@
             
             <h3 class="modal-title" id="notifTitle">تحديث جديد!</h3>
             
-            <!-- 🖼️ مكان الصورة في الإشعار -->
-            <img id="notifImage" class="modal-banner-img" src="" alt="Notification Image">
-            
+            <!-- التاريخ والوقت -->
+            <div id="notifDate" class="modal-date"></div>
+
+            <!-- صورة الإشعار -->
+            <img id="notifImage" src="" class="modal-image" alt="Update Image">
+
             <p class="modal-body" id="notifBody">...</p>
+            
             <button class="modal-btn" onclick="dismissNotification()" data-ar="لقد قرأت، لا تظهر مرة أخرى" data-en="I read it, don't show again" data-tr="Okudum, tekrar gösterme">لقد قرأت، لا تظهر مرة أخرى</button>
         </div>
     </div>
@@ -306,11 +326,12 @@
                     <span>📢</span> <span data-ar="آخر التحديثات" data-tr="Son Güncellemeler" data-en="Latest Updates">آخر التحديثات</span>
                 </div>
                 
-                <!-- 🖼️ مكان الصورة في صفحة ما الجديد -->
-                <img id="whatsNewImage" class="modal-banner-img" style="display:none; margin-bottom:1rem;" src="">
-                
-                <div id="whatsNewContent" style="line-height:1.8; color:var(--text-color);">
-                    <p data-ar="لا توجد تحديثات مسجلة حالياً." data-en="No updates recorded yet." data-tr="Henüz kayıtlı güncelleme yok.">لا توجد تحديثات مسجلة حالياً.</p>
+                <div id="whatsNewContent" class="news-card">
+                    <span id="newsDate" class="news-date"></span>
+                    <img id="newsImage" src="" class="news-image">
+                    <div id="newsText" style="line-height:1.8; color:var(--text-color);">
+                        <p data-ar="لا توجد تحديثات مسجلة حالياً." data-en="No updates recorded yet." data-tr="Henüz kayıtlı güncelleme yok.">لا توجد تحديثات مسجلة حالياً.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -409,7 +430,7 @@
         };
 
         let currentLang = 'ar';
-        let deferredPrompt;
+        let deferredPrompt; 
         let currentNotifId = 0;
 
         // 2️⃣ بدء التشغيل
@@ -426,7 +447,7 @@
             });
         });
 
-        // 3️⃣ نظام الإشعارات المتقدم (مع دعم الصور)
+        // 3️⃣ نظام الإشعارات المتقدم (Modal)
         async function checkRemoteNotifications() {
             try {
                 const response = await fetch(`notifications.json?t=${new Date().getTime()}`);
@@ -435,8 +456,8 @@
                 const data = await response.json();
                 currentNotifId = data.id;
 
-                // حفظ البيانات كاملة (النص + الصورة) لصفحة ما الجديد
-                localStorage.setItem('latest_update_data', JSON.stringify(data));
+                // حفظ البيانات كاملة (نص + صورة + تاريخ)
+                localStorage.setItem('latest_news_data', JSON.stringify(data));
 
                 const dismissedId = localStorage.getItem('dismissed_notif_id');
 
@@ -450,18 +471,22 @@
             const modal = document.getElementById('notificationModal');
             const title = document.getElementById('notifTitle');
             const body = document.getElementById('notifBody');
-            const img = document.getElementById('notifImage');
+            const dateEl = document.getElementById('notifDate');
+            const imgEl = document.getElementById('notifImage');
 
             const titles = { ar: "تحديث جديد!", en: "New Update!", tr: "Yeni Güncelleme!" };
             title.textContent = titles[currentLang];
             body.textContent = data.message[currentLang] || data.message['ar'];
-
-            // معالجة الصورة
+            
+            // عرض التاريخ
+            dateEl.textContent = data.date || '';
+            
+            // عرض الصورة إذا وجدت
             if (data.image && data.image.trim() !== "") {
-                img.src = data.image;
-                img.style.display = 'block';
+                imgEl.src = data.image;
+                imgEl.style.display = 'block';
             } else {
-                img.style.display = 'none';
+                imgEl.style.display = 'none';
             }
 
             modal.style.display = 'flex';
@@ -472,18 +497,21 @@
             document.getElementById('notificationModal').style.display = 'none';
         }
 
-        // 4️⃣ صفحة "ما الجديد" (مع دعم الصور)
+        // 4️⃣ صفحة "ما الجديد"
         function openWhatsNew() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('whatsNewPage').classList.add('active');
             
-            const contentDiv = document.getElementById('whatsNewContent');
-            const imgDiv = document.getElementById('whatsNewImage');
-            const storedData = localStorage.getItem('latest_update_data');
+            const textDiv = document.getElementById('newsText');
+            const imgDiv = document.getElementById('newsImage');
+            const dateDiv = document.getElementById('newsDate');
+            
+            const storedData = localStorage.getItem('latest_news_data');
             
             if (storedData) {
                 const data = JSON.parse(storedData);
-                contentDiv.textContent = data.message[currentLang] || data.message['ar'];
+                textDiv.textContent = data.message[currentLang] || data.message['ar'];
+                dateDiv.textContent = data.date || '';
                 
                 if (data.image && data.image.trim() !== "") {
                     imgDiv.src = data.image;
@@ -544,6 +572,7 @@
             const t = document.getElementById('headerTitle'); const i = document.getElementById('headerIcon');
             t.setAttribute('data-ar', s.ar); t.setAttribute('data-tr', s.tr); t.setAttribute('data-en', s.en);
             t.textContent = s[currentLang]; i.textContent = s.icon;
+            
             if(id === 12) document.getElementById('settingsPage').classList.add('active');
             else {
                 document.getElementById('secTitle').textContent = s[currentLang];
