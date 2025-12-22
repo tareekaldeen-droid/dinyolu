@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "active": true,
+  "message": {
+    "ar": "مرحباً! هذا هو الإصدار الجديد. تم إضافة زر التثبيت وقسم ما الجديد.",
+    "en": "Hello! New version. Added Install button and What's New section.",
+    "tr": "Merhaba! Yeni sürüm. Yükleme düğmesi ve Yenilikler bölümü eklendi."
+  }
+}

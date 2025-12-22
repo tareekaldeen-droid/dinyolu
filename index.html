@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<!-- 🚫 منع الترجمة التلقائية للمتصفح -->
+<html lang="ar" dir="rtl" translate="no" class="notranslate">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate"> <!-- تأكيد منع الترجمة لجوجل -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- 🍎 إعدادات iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="الشامل">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <meta name="theme-color" content="#0d7c66">
+    <title>التطبيق الشامل | Ultimate App</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- الخطوط -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;800&family=Lateef&family=Tajawal:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================ */
+        /* 🎨 المتغيرات والتصميم الأساسي */
+        /* ============================================================ */
+        :root {
+            --primary-color: #0d7c66;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0,0,0,0.05);
+            --header-bg: linear-gradient(135deg, #0d7c66, #084135);
+            --app-font: 'Cairo', sans-serif;
+            --base-size: 16px;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4db6ac;
+            --bg-color: #051311;
+            --card-bg: #0f221e;
+            --text-color: #e2e8e6;
+            --text-secondary: #8b9d96;
+            --border-color: #1f3a35;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --header-bg: linear-gradient(135deg, #0f221e, #051311);
+        }
+
+        html[data-font-size="xs"] { --base-size: 13px; }
+        html[data-font-size="sm"] { --base-size: 14.5px; }
+        html[data-font-size="md"] { --base-size: 16px; }
+        html[data-font-size="lg"] { --base-size: 18px; }
+        html[data-font-size="xl"] { --base-size: 20px; }
+
+        html, body {
+            font-family: var(--app-font) !important;
+            font-size: var(--base-size);
+            transition: background-color 0.4s ease, color 0.3s ease;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: calc(80px + var(--safe-bottom));
+            line-height: 1.7;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+
+        /* الهيدر */
+        .top-nav {
+            background: var(--header-bg);
+            padding: 0.8rem 1rem;
+            padding-top: calc(0.8rem + var(--safe-top));
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15); color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.2rem; }
+        .top-controls { display: flex; gap: 10px; align-items: center; }
+        .icon-btn {
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px; width: 40px; height: 40px; cursor: pointer; color: white;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+        .lang-select {
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);
+            color: white; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-family: inherit; font-weight: bold;
+        }
+        .lang-select option { background: #333; color: white; }
+
+        /* البطاقات */
+        .hero-card {
+            background: linear-gradient(135deg, rgba(13, 124, 102, 0.1), rgba(13, 124, 102, 0.05));
+            border: 1px solid var(--primary-color); border-radius: 24px; padding: 2rem; text-align: center; margin-bottom: 2rem;
+        }
+        .app-logo {
+            width: 110px; height: 110px; background: white; border-radius: 50%; padding: 6px; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .app-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+
+        .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (min-width: 768px) { .grid-menu { grid-template-columns: repeat(3, 1fr); } }
+
+        .menu-item {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem 1rem;
+            text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; box-shadow: var(--shadow);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .menu-item:active { transform: scale(0.95); }
+        .menu-icon { width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 12px; }
+
+        /* ألوان الأيقونات */
+        .bg-green { background: rgba(46, 125, 50, 0.15); color: #2e7d32; }
+        .bg-blue { background: rgba(21, 101, 192, 0.15); color: #1565c0; }
+        .bg-purple { background: rgba(123, 31, 162, 0.15); color: #7b1fa2; }
+        .bg-orange { background: rgba(239, 108, 0, 0.15); color: #ef6c00; }
+        .bg-red { background: rgba(198, 40, 40, 0.15); color: #c62828; }
+        .bg-teal { background: rgba(0, 105, 92, 0.15); color: #00695c; }
+        .bg-gray { background: rgba(66, 66, 66, 0.15); color: #616161; }
+        [data-theme="dark"] .bg-green { color: #81c784; background: rgba(129, 199, 132, 0.1); }
+        [data-theme="dark"] .bg-blue { color: #64b5f6; background: rgba(100, 181, 246, 0.1); }
+        [data-theme="dark"] .bg-purple { color: #ba68c8; background: rgba(186, 104, 200, 0.1); }
+        [data-theme="dark"] .bg-orange { color: #ffb74d; background: rgba(255, 183, 77, 0.1); }
+        [data-theme="dark"] .bg-red { color: #e57373; background: rgba(229, 115, 115, 0.1); }
+        [data-theme="dark"] .bg-teal { color: #4db6ac; background: rgba(77, 182, 172, 0.1); }
+        [data-theme="dark"] .bg-gray { color: #e0e0e0; background: rgba(224, 224, 224, 0.1); }
+
+        .item-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 4px; }
+        .item-desc { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* الصفحات */
+        .page { display: none; animation: fadeIn 0.3s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 10px; background: var(--card-bg); border: 1px solid var(--border-color);
+            padding: 12px 24px; border-radius: 30px; color: var(--text-color); cursor: pointer; margin-bottom: 1.5rem; font-weight: bold; box-shadow: var(--shadow);
+        }
+        body[dir="ltr"] .back-btn span:first-child { transform: rotate(180deg); display: inline-block; }
+
+        .empty-content { text-align: center; padding: 4rem 1rem; color: var(--text-secondary); border: 2px dashed var(--border-color); border-radius: 16px; background: var(--card-bg); }
+
+        /* الإعدادات */
+        .settings-group { background: var(--card-bg); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
+        .settings-header { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: var(--primary-color); display: flex; align-items: center; gap: 8px; }
+        .settings-row { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .settings-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .label-text { display: block; margin-bottom: 10px; font-weight: bold; }
+        .font-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+        .font-btn, .size-btn, .theme-btn { padding: 12px; border: 2px solid var(--border-color); background: var(--bg-color); border-radius: 12px; cursor: pointer; color: var(--text-color); font-size: 1rem; transition: 0.2s; }
+        .font-btn.active, .size-btn.active, .theme-btn.active { border-color: var(--primary-color); background: rgba(13, 124, 102, 0.1); color: var(--primary-color); font-weight: bold; }
+        .size-controls { display: flex; gap: 5px; } .size-btn { flex: 1; }
+        .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; } .theme-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+
+        /* الشريط السفلي */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border-color);
+            display: flex; justify-content: space-around; padding: 12px 0; padding-bottom: calc(12px + var(--safe-bottom)); z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        }
+        .nav-link { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer; width: 50%; transition: 0.2s; }
+        .nav-link.active { color: var(--primary-color); font-weight: bold; transform: translateY(-2px); }
+        .nav-link svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; }
+
+        /* ============================================================ */
+        /* 🔔 نافذة الإشعارات العصرية (Modal) */
+        /* ============================================================ */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px;
+            animation: fadeInOverlay 0.3s ease;
+        }
+        .modal-content {
+            background: var(--card-bg); width: 100%; max-width: 400px;
+            border-radius: 24px; padding: 2rem; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+            transform: scale(0.9); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .modal-logo { width: 80px; height: 80px; margin: 0 auto 1rem; background: white; border-radius: 50%; padding: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .modal-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+        .modal-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 0.5rem; color: var(--primary-color); }
+        .modal-body { font-size: 1rem; color: var(--text-color); margin-bottom: 2rem; line-height: 1.6; }
+        .modal-btn {
+            background: var(--primary-color); color: white; border: none; padding: 12px 24px;
+            border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(13, 124, 102, 0.3);
+        }
+        
+        /* تعليمات iOS */
+        .ios-instructions { text-align: right; margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary); }
+        .ios-step { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .ios-icon { font-size: 1.2rem; }
+
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- 🔔 نافذة الإشعار (Modal) -->
+    <div id="notificationModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-logo">
+                <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,h=378,fit=crop,trim=68.26666666666667;68.26666666666667;68.26666666666667;68.26666666666667/a5oqci6YCwpNHTpH/whatsapp-image-2025-12-19-at-11.11.04-am-fDCDqijtAhLk7CFm.png" alt="Logo">
+            </div>
+            <h3 class="modal-title" id="notifTitle">تحديث جديد!</h3>
+            <p class="modal-body" id="notifBody">تم إضافة ميزات جديدة...</p>
+            <button class="modal-btn" onclick="dismissNotification()" data-ar="لقد قرأت، لا تظهر مرة أخرى" data-en="I read it, don't show again" data-tr="Okudum, tekrar gösterme">لقد قرأت، لا تظهر مرة أخرى</button>
+        </div>
+    </div>
+
+    <!-- 📲 نافذة التثبيت للآيفون (iOS Install Modal) -->
+    <div id="iosInstallModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-logo">
+                <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,h=378,fit=crop,trim=68.26666666666667;68.26666666666667;68.26666666666667;68.26666666666667/a5oqci6YCwpNHTpH/whatsapp-image-2025-12-19-at-11.11.04-am-fDCDqijtAhLk7CFm.png" alt="Logo">
+            </div>
+            <h3 class="modal-title" data-ar="تثبيت التطبيق" data-en="Install App" data-tr="Uygulamayı Yükle">تثبيت التطبيق</h3>
+            <div class="ios-instructions">
+                <div class="ios-step">
+                    <span class="ios-icon"1️⃣</span>
+                    <span data-ar="اضغط على زر المشاركة بالأسفل" data-en="Tap the Share button below" data-tr="Aşağıdaki Paylaş düğmesine basın">اضغط على زر المشاركة بالأسفل</span>
+                    <span style="font-size:1.2rem">⎋</span>
+                </div>
+                <div class="ios-step">
+                    <span class="ios-icon">2️⃣</span>
+                    <span data-ar="اختر 'إضافة إلى الصفحة الرئيسية'" data-en="Select 'Add to Home Screen'" data-tr="'Ana Ekrana Ekle'yi seçin">اختر 'إضافة إلى الصفحة الرئيسية'</span>
+                    <span style="font-size:1.2rem">➕</span>
+                </div>
+            </div>
+            <button class="modal-btn" style="margin-top:15px; background:#333;" onclick="closeIosModal()" data-ar="حسناً، فهمت" data-en="Got it" data-tr="Anladım">حسناً، فهمت</button>
+        </div>
+    </div>
+
+    <!-- 🧭 الهيدر -->
+    <nav class="top-nav">
+        <div class="logo">
+            <span class="nav-icon" id="headerIcon">🏠</span>
+            <span id="headerTitle" data-ar="الرئيسية" data-tr="Ana Sayfa" data-en="Home">الرئيسية</span>
+        </div>
+        <div class="top-controls">
+            <button class="icon-btn" id="headerThemeBtn" onclick="toggleHeaderTheme()">☀️</button>
+            <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="tr">Türkçe</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 🏠 الرئيسية -->
+        <div id="homePage" class="page active">
+            <div class="hero-card">
+                <div class="app-logo">
+                    <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,h=378,fit=crop,trim=68.26666666666667;68.26666666666667;68.26666666666667;68.26666666666667/a5oqci6YCwpNHTpH/whatsapp-image-2025-12-19-at-11.11.04-am-fDCDqijtAhLk7CFm.png" alt="Logo">
+                </div>
+                <h2 data-ar="التطبيق الشامل" data-tr="Kapsamlı Uygulama" data-en="Ultimate App">التطبيق الشامل</h2>
+                <p style="opacity: 0.8;" data-ar="بوابتك للخدمات المتكاملة" data-tr="Entegre hizmetler portalınız" data-en="Your portal for integrated services">بوابتك للخدمات المتكاملة</p>
+            </div>
+            <div class="grid-menu" id="menuGrid"></div>
+        </div>
+
+        <!-- 📄 صفحة القسم -->
+        <div id="sectionPage" class="page">
+            <button class="back-btn" onclick="goHome()"><span>➜</span><span data-ar="العودة" data-tr="Geri" data-en="Back">العودة</span></button>
+            <div class="empty-content">
+                <div style="font-size: 4rem; margin-bottom: 1rem;" id="secIcon">🚧</div>
+                <h2 id="secTitle" style="margin-bottom: 10px;">Title</h2>
+                <p data-ar="هذا القسم قيد التطوير" data-tr="Bu bölüm yapım aşamasındadır" data-en="This section is under development">هذا القسم قيد التطوير</p>
+            </div>
+        </div>
+
+        <!-- 📰 صفحة "ما الجديد" (محتوى الإشعار المخزن) -->
+        <div id="whatsNewPage" class="page">
+            <button class="back-btn" onclick="openSection(12)"><span>➜</span><span data-ar="عودة للإعدادات" data-tr="Ayarlara Dön" data-en="Back to Settings">عودة للإعدادات</span></button>
+            <div class="settings-group">
+                <div class="settings-header">
+                    <span>📢</span> <span data-ar="آخر التحديثات" data-tr="Son Güncellemeler" data-en="Latest Updates">آخر التحديثات</span>
+                </div>
+                <div id="whatsNewContent" style="line-height:1.8; color:var(--text-color);">
+                    <!-- سيتم وضع النص هنا بواسطة JS -->
+                    <p data-ar="لا توجد تحديثات مسجلة حالياً." data-en="No updates recorded yet." data-tr="Henüz kayıtlı güncelleme yok.">لا توجد تحديثات مسجلة حالياً.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⚙️ الإعدادات -->
+        <div id="settingsPage" class="page">
+            <button class="back-btn" onclick="goHome()"><span>➜</span><span data-ar="العودة" data-tr="Geri" data-en="Back">العودة</span></button>
+
+            <!-- زر تثبيت التطبيق -->
+            <div class="settings-group" id="installGroup">
+                <div class="settings-header">
+                    <span>📲</span> <span data-ar="التطبيق" data-tr="Uygulama" data-en="Application">التطبيق</span>
+                </div>
+                <button class="modal-btn" onclick="installApp()" style="margin-bottom:10px;">
+                    <span data-ar="تثبيت التطبيق على الهاتف" data-tr="Uygulamayı Yükle" data-en="Install App">تثبيت التطبيق على الهاتف</span>
+                </button>
+            </div>
+
+            <!-- زر ما الجديد -->
+            <div class="settings-group">
+                <div class="settings-header">
+                    <span>✨</span> <span data-ar="معلومات" data-tr="Bilgi" data-en="Info">معلومات</span>
+                </div>
+                <div class="settings-row" onclick="openWhatsNew()" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                    <span class="label-text" style="margin:0" data-ar="ما الجديد في هذا الإصدار؟" data-tr="Bu sürümdeki yenilikler?" data-en="What's new in this version?">ما الجديد في هذا الإصدار؟</span>
+                    <span>➜</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-header"><span>🎨</span> <span data-ar="المظهر" data-tr="Görünüm" data-en="Appearance">المظهر</span></div>
+                <div class="settings-row">
+                    <span class="label-text" data-ar="النمط" data-tr="Mod" data-en="Mode">النمط</span>
+                    <div class="theme-grid">
+                        <button class="theme-btn" onclick="setAppTheme('light')" data-theme-val="light"><span>☀️</span><span data-ar="نهاري" data-tr="Gündüz" data-en="Light">نهاري</span></button>
+                        <button class="theme-btn" onclick="setAppTheme('dark')" data-theme-val="dark"><span>🌙</span><span data-ar="ليلي" data-tr="Gece" data-en="Dark">ليلي</span></button>
+                        <button class="theme-btn" onclick="setAppTheme('auto')" data-theme-val="auto"><span>⚙️</span><span data-ar="تلقائي" data-tr="Otomatik" data-en="Auto">تلقائي</span></button>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <span class="label-text" data-ar="حجم النص" data-tr="Yazı Boyutu" data-en="Font Size">حجم النص</span>
+                    <div class="size-controls">
+                        <button class="size-btn" onclick="setFontSize('xs')" data-size="xs">XS</button>
+                        <button class="size-btn" onclick="setFontSize('sm')" data-size="sm">S</button>
+                        <button class="size-btn" onclick="setFontSize('md')" data-size="md">M</button>
+                        <button class="size-btn" onclick="setFontSize('lg')" data-size="lg">L</button>
+                        <button class="size-btn" onclick="setFontSize('xl')" data-size="xl">XL</button>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <span class="label-text" data-ar="الخط" data-tr="Yazı Tipi" data-en="Font">الخط</span>
+                    <div class="font-grid" id="fontOptionsContainer"></div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-header"><span>💾</span> <span data-ar="البيانات" data-tr="Veri" data-en="Data">البيانات</span></div>
+                <button style="width: 100%; padding: 14px; background: #ef4444; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold;" onclick="resetApp()">
+                    <span data-ar="إعادة ضبط التطبيق" data-tr="Uygulamayı Sıfırla" data-en="Reset Application">إعادة ضبط التطبيق</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- الشريط السفلي -->
+    <nav class="bottom-nav">
+        <div class="nav-link active" onclick="goHome()">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> <span data-ar="الرئيسية" data-tr="Ana Sayfa" data-en="Home">الرئيسية</span>
+        </div>
+        <div class="nav-link" onclick="openSection(12)">
+            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg> <span data-ar="الإعدادات" data-tr="Ayarlar" data-en="Settings">الإعدادات</span>
+        </div>
+    </nav>
+
+    <script>
+        // 1️⃣ البيانات
+        const sectionsDB = [
+            { id: 1,  icon: '📖', color: 'bg-green',  ar: 'القرآن الكريم', tr: 'Kuran-ı Kerim', en: 'The Holy Quran' },
+            { id: 2,  icon: '🕌', color: 'bg-blue',   ar: 'مواقيت الصلاة', tr: 'Namaz Vakitleri', en: 'Prayer Times' },
+            { id: 3,  icon: '📿', color: 'bg-purple', ar: 'الأذكار',       tr: 'Zikirler',        en: 'Azkar' },
+            { id: 4,  icon: '📅', color: 'bg-orange', ar: 'التقويم الهجري',tr: 'Hicri Takvim',    en: 'Hijri Calendar' },
+            { id: 5,  icon: '🧭', color: 'bg-red',    ar: 'القبلة',        tr: 'Kıble',           en: 'Qibla' },
+            { id: 6,  icon: '📚', color: 'bg-teal',   ar: 'المكتبة',       tr: 'Kütüphane',       en: 'Library' },
+            { id: 7,  icon: '📻', color: 'bg-gray',   ar: 'الإذاعة',       tr: 'Radyo',           en: 'Radio' },
+            { id: 8,  icon: '💡', color: 'bg-green',  ar: 'خواطر',         tr: 'Düşünceler',      en: 'Reflections' },
+            { id: 9,  icon: '🕋', color: 'bg-brown',  ar: 'الحج والعمرة',  tr: 'Hac ve Umre',     en: 'Hajj & Umrah' },
+            { id: 10, icon: '🤲', color: 'bg-blue',   ar: 'أدعية',         tr: 'Dualar',          en: 'Supplications' },
+            { id: 11, icon: '📢', color: 'bg-purple', ar: 'الإعلانات',     tr: 'Duyurular',       en: 'Announcements' },
+            { id: 12, icon: '⚙️', color: 'bg-gray',   ar: 'الإعدادات',     tr: 'Ayarlar',         en: 'Settings' }
+        ];
+
+        const fontsDB = {
+            ar: [{ name: 'Cairo', label: 'كايرو' }, { name: 'Amiri', label: 'أميري' }, { name: 'Tajawal', label: 'تجوّل' }, { name: 'Lateef', label: 'لطيف' }],
+            en: [{ name: 'Roboto', label: 'Roboto' }, { name: 'Open Sans', label: 'Open Sans' }, { name: 'Montserrat', label: 'Montserrat' }],
+            tr: [{ name: 'Roboto', label: 'Roboto' }, { name: 'Open Sans', label: 'Open Sans' }, { name: 'Montserrat', label: 'Montserrat' }]
+        };
+
+        let currentLang = 'ar';
+        let deferredPrompt; // لتخزين حدث التثبيت للأندرويد
+        let currentNotifId = 0; // تخزين رقم الإشعار الحالي
+
+        // 2️⃣ بدء التشغيل
+        document.addEventListener('DOMContentLoaded', () => {
+            detectInitialLanguage();
+            loadPreferences();
+            renderMenu();
+            setAppTheme(localStorage.getItem('appThemePref') || 'auto');
+            checkRemoteNotifications();
+            
+            // الاستماع لحدث التثبيت (أندرويد/كروم)
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+            });
+        });
+
+        // 3️⃣ نظام الإشعارات المتقدم (Modal)
+        async function checkRemoteNotifications() {
+            try {
+                // جلب الملف مع منع الكاش
+                const response = await fetch(`notifications.json?t=${new Date().getTime()}`);
+                if (!response.ok) return;
+
+                const data = await response.json();
+                currentNotifId = data.id;
+
+                // حفظ محتوى "ما الجديد" دائماً (لصفحة الإعدادات)
+                localStorage.setItem('latest_news', JSON.stringify(data.message));
+
+                // التحقق من حالة القراءة
+                const dismissedId = localStorage.getItem('dismissed_notif_id');
+
+                // الشرط: إذا كان رقم التحديث الجديد أكبر من الرقم الذي تم تجاهله سابقاً -> أظهر النافذة
+                if (data.id > (dismissedId || 0) && data.active) {
+                    showModal(data);
+                }
+            } catch (error) { console.log('No notifications'); }
+        }
+
+        function showModal(data) {
+            const modal = document.getElementById('notificationModal');
+            const title = document.getElementById('notifTitle');
+            const body = document.getElementById('notifBody');
+
+            // تحديد النصوص حسب اللغة
+            const titles = { ar: "تحديث جديد!", en: "New Update!", tr: "Yeni Güncelleme!" };
+            title.textContent = titles[currentLang];
+            body.textContent = data.message[currentLang] || data.message['ar'];
+
+            modal.style.display = 'flex';
+        }
+
+        function dismissNotification() {
+            // عند الضغط على الزر، نحفظ أن المستخدم قرأ هذا التحديث تحديداً
+            localStorage.setItem('dismissed_notif_id', currentNotifId);
+            document.getElementById('notificationModal').style.display = 'none';
+        }
+
+        // 4️⃣ صفحة "ما الجديد"
+        function openWhatsNew() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('whatsNewPage').classList.add('active');
+            
+            const contentDiv = document.getElementById('whatsNewContent');
+            const storedNews = localStorage.getItem('latest_news');
+            
+            if (storedNews) {
+                const newsObj = JSON.parse(storedNews);
+                contentDiv.textContent = newsObj[currentLang] || newsObj['ar'];
+            }
+        }
+
+        // 5️⃣ منطق تثبيت التطبيق (Install Logic)
+        function installApp() {
+            // التحقق هل الجهاز iOS
+            const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+            if (isIos) {
+                // إظهار تعليمات iOS
+                document.getElementById('iosInstallModal').style.display = 'flex';
+            } else if (deferredPrompt) {
+                // أندرويد/كروم: إظهار النافذة النظامية
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // حالة غير مدعومة أو تم التثبيت مسبقاً
+                alert(currentLang === 'ar' ? 'التطبيق مثبت بالفعل أو غير مدعوم' : 'App already installed or not supported');
+            }
+        }
+
+        function closeIosModal() {
+            document.getElementById('iosInstallModal').style.display = 'none';
+        }
+
+        // 6️⃣ الوظائف الأساسية (اللغة، الثيم، التنقل)
+        function setAppTheme(pref) {
+            localStorage.setItem('appThemePref', pref);
+            document.querySelectorAll('.theme-btn').forEach(b => { b.classList.remove('active'); if(b.dataset.themeVal === pref) b.classList.add('active'); });
+            
+            if(pref === 'auto') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(isDark ? 'dark' : 'light');
+            } else {
+                applyTheme(pref);
+            }
+        }
+        function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); document.getElementById('headerThemeBtn').textContent = t === 'dark' ? '🌙' : '☀️'; }
+        function toggleHeaderTheme() { const c = document.documentElement.getAttribute('data-theme') || 'light'; setAppTheme(c === 'dark' ? 'light' : 'dark'); }
+
+        function changeLanguage(lang) {
+            currentLang = lang; localStorage.setItem('appLang', lang); document.getElementById('langSelect').value = lang;
+            document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.querySelectorAll('[data-ar]').forEach(el => el.textContent = el.getAttribute(`data-${lang}`));
+            renderMenu(); renderFontOptions();
+            const f = localStorage.getItem(`appFont_${lang}`); setFontFamily(f || (lang === 'ar' ? 'Cairo' : 'Roboto'));
+        }
+        function detectInitialLanguage() { const s = localStorage.getItem('appLang'); if(s) changeLanguage(s); else { const b = navigator.language; if(b.startsWith('ar')) changeLanguage('ar'); else if(b.startsWith('tr')) changeLanguage('tr'); else changeLanguage('en'); } }
+
+        function renderMenu() {
+            const g = document.getElementById('menuGrid'); g.innerHTML = '';
+            sectionsDB.forEach(s => {
+                const d = document.createElement('div'); d.className = 'menu-item'; d.onclick = () => openSection(s.id);
+                d.innerHTML = `<div class="menu-icon ${s.color}">${s.icon}</div><div class="item-title">${s[currentLang]}</div><div class="item-desc">${currentLang==='ar'?'انقر للدخول':(currentLang==='tr'?'Girmek için tıkla':'Tap to enter')}</div>`;
+                g.appendChild(d);
+            });
+        }
+
+        function openSection(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const s = sectionsDB.find(x => x.id === id);
+            const t = document.getElementById('headerTitle'); const i = document.getElementById('headerIcon');
+            t.setAttribute('data-ar', s.ar); t.setAttribute('data-tr', s.tr); t.setAttribute('data-en', s.en);
+            t.textContent = s[currentLang]; i.textContent = s.icon;
+            
+            if(id === 12) document.getElementById('settingsPage').classList.add('active');
+            else {
+                document.getElementById('secTitle').textContent = s[currentLang];
+                document.getElementById('secIcon').textContent = s.icon;
+                document.getElementById('sectionPage').classList.add('active');
+            }
+            window.scrollTo(0,0);
+        }
+        function goHome() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('homePage').classList.add('active');
+            const t = document.getElementById('headerTitle'); t.setAttribute('data-ar','الرئيسية'); t.setAttribute('data-tr','Ana Sayfa'); t.setAttribute('data-en','Home');
+            t.textContent = t.getAttribute(`data-${currentLang}`); document.getElementById('headerIcon').textContent = '🏠'; window.scrollTo(0,0);
+        }
+
+        function renderFontOptions() {
+            const c = document.getElementById('fontOptionsContainer'); c.innerHTML = '';
+            const fonts = fontsDB[currentLang] || fontsDB['en'];
+            const cur = localStorage.getItem(`appFont_${currentLang}`) || (currentLang === 'ar' ? 'Cairo' : 'Roboto');
+            fonts.forEach(f => {
+                const b = document.createElement('button'); b.className = `font-btn ${cur === f.name ? 'active' : ''}`;
+                b.style.fontFamily = f.name; b.textContent = f.label; b.onclick = () => setFontFamily(f.name); c.appendChild(b);
+            });
+        }
+        function setFontFamily(f) { document.documentElement.style.setProperty('--app-font', `'${f}', sans-serif`); localStorage.setItem(`appFont_${currentLang}`, f); renderFontOptions(); }
+        function setFontSize(s) { document.documentElement.setAttribute('data-font-size', s); localStorage.setItem('appFontSize', s); document.querySelectorAll('.size-btn').forEach(b => { b.classList.remove('active'); if(b.dataset.size === s) b.classList.add('active'); }); }
+        function loadPreferences() { setFontSize(localStorage.getItem('appFontSize') || 'md'); }
+        function resetApp() { if(confirm('Reset App?')) { localStorage.clear(); location.reload(); } }
+
+        // Service Worker
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+    </script>
+</body>
+</html>
