@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>نظام المستودع الذكي Pro V8 (Smart + Fixed Mic)</title>
+  <title>نظام المستودع الذكي Pro V7 (Mic Fixed)</title>
 
-  <!-- Libraries -->
+  <!-- المكتبات الخارجية -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -29,10 +29,10 @@
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
     body { font-family: 'Tajawal', sans-serif; overflow: hidden; touch-action: manipulation; }
 
-    .mic-active { animation: pulse-red 1.2s infinite; background-color: #ef4444 !important; color: white !important; }
+    .mic-active { animation: pulse-red 1.5s infinite; background-color: #ef4444 !important; color: white !important; }
     @keyframes pulse-red {
-      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65); }
-      70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
       100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
@@ -41,16 +41,14 @@
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     .dark ::-webkit-scrollbar-thumb { background: #475569; }
 
-    .animate-fade-in { animation: fadeIn 220ms ease-out; }
-    @keyframes fadeIn { from {opacity:0; transform:translateY(6px)} to {opacity:1; transform:translateY(0)} }
-
-    .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .65rem; border-radius:9999px; font-size:.75rem; }
+    .fade-in { animation: fadeIn .18s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
   </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 h-screen-dvh w-full flex flex-col">
 
-  <!-- Login -->
+  <!-- شاشة تسجيل الدخول -->
   <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900 bg-opacity-95 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-[90%] max-w-md text-center">
       <div class="mb-6 bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto text-primary">
@@ -65,33 +63,26 @@
           <option value="2">👀 معتز (عرض فقط)</option>
           <option value="3">📦 محمد (مدير مستودع)</option>
         </select>
-
-        <input type="password" id="password-input" placeholder="كلمة المرور (123)"
-          class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none" />
-
+        <input type="password" id="password-input" placeholder="كلمة المرور (123)" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none">
         <button onclick="login()" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg transform active:scale-95">
           تسجيل الدخول
         </button>
       </div>
+      <p id="login-error" class="text-red-500 mt-4 text-sm hidden font-bold animate-bounce">⚠️ كلمة المرور غير صحيحة</p>
 
-      <div id="env-warning" class="mt-4 text-xs text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-xl p-3 hidden text-right">
-        <div class="font-bold mb-1">تنبيه مهم للميكروفون</div>
-        <div>الميكروفون يعمل عادةً فقط على <b>HTTPS</b> أو <b>localhost</b>. شغّل الملف على سيرفر محلي/استضافة آمنة.</div>
+      <div class="mt-6 text-xs text-gray-500 leading-relaxed">
+        <b>مهم:</b> الميكروفون يحتاج HTTPS أو localhost. على iPhone/Safari قد لا يعمل التعرف الصوتي.
       </div>
-
-      <p id="login-error" class="text-red-500 mt-4 text-sm hidden font-bold">⚠️ كلمة المرور غير صحيحة</p>
     </div>
   </div>
 
-  <!-- App -->
+  <!-- واجهة التطبيق -->
   <div id="app-interface" class="flex h-full w-full hidden relative">
 
-    <!-- Sidebar (PC) -->
+    <!-- القائمة الجانبية (PC) -->
     <aside class="hidden lg:flex w-72 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex-col shadow-xl z-20">
       <div class="p-6 border-b dark:border-gray-700 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
-          <i class="fas fa-user"></i>
-        </div>
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg"><i class="fas fa-user"></i></div>
         <div>
           <h3 id="user-greeting-pc" class="font-bold text-gray-800 dark:text-white">مرحباً</h3>
           <p id="user-role-pc" class="text-xs text-gray-500 dark:text-gray-400"></p>
@@ -112,7 +103,7 @@
 
       <div class="p-4 border-t dark:border-gray-700 space-y-2">
         <button onclick="openSettings()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-          <span>الإعدادات</span><i class="fas fa-sliders text-primary"></i>
+          <span>⚙️ الإعدادات</span><i class="fas fa-sliders text-gray-500"></i>
         </button>
         <button onclick="toggleTheme()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
           <span>الوضع الليلي</span><i class="fas fa-moon text-yellow-500"></i>
@@ -123,20 +114,18 @@
       </div>
     </aside>
 
-    <!-- Main -->
+    <!-- المحتوى الرئيسي -->
     <main class="flex-1 flex flex-col h-full relative w-full bg-gray-100 dark:bg-gray-900">
 
-      <!-- Header (Mobile) -->
+      <!-- رأس الصفحة (Mobile) -->
       <header class="lg:hidden bg-white dark:bg-gray-800 p-4 shadow-md flex justify-between items-center z-10 h-16 shrink-0">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm">
-            <i class="fas fa-user"></i>
-          </div>
+          <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm"><i class="fas fa-user"></i></div>
           <span id="user-greeting-mobile" class="font-bold text-sm">مرحباً</span>
         </div>
         <div class="flex gap-3">
           <button onclick="openSettings()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-            <i class="fas fa-sliders text-primary"></i>
+            <i class="fas fa-sliders text-gray-600 dark:text-gray-200"></i>
           </button>
           <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
             <i class="fas fa-moon text-yellow-500"></i>
@@ -149,26 +138,12 @@
 
       <div class="flex-1 overflow-hidden relative w-full">
 
-        <!-- Chat -->
+        <!-- 1. المحادثة -->
         <section id="tab-chat" class="h-full flex flex-col w-full">
-          <div class="px-4 pt-4 pb-2">
-            <div class="flex flex-wrap gap-2 items-center">
-              <span id="stt-status" class="chip bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200">
-                <i class="fas fa-microphone-slash"></i> الميكروفون: غير مفعّل
-              </span>
-              <span id="tts-status" class="chip bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-200">
-                <i class="fas fa-volume-up"></i> الصوت: —
-              </span>
-              <span class="chip bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-200">
-                <i class="fas fa-lightbulb"></i> مثال: "كم w334" أو "نواقص" أو "طاولة تلفزيون"
-              </span>
-            </div>
-          </div>
-
           <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-4 pb-24 lg:pb-4"></div>
 
           <div class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 p-3 lg:p-4 shadow-lg z-20 shrink-0">
-            <div class="flex justify-center gap-2 mb-3 text-xs overflow-x-auto pb-1">
+            <div class="flex justify-center gap-4 mb-3 text-xs overflow-x-auto pb-1">
               <button onclick="clearChat()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-red-100 text-gray-600 dark:text-gray-300">
                 <i class="fas fa-trash"></i> مسح
               </button>
@@ -178,60 +153,53 @@
               <button onclick="shareWhatsApp()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-green-100 text-gray-600 dark:text-gray-300">
                 <i class="fab fa-whatsapp"></i> واتساب
               </button>
-              <button onclick="openSettings()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-purple-100 text-gray-600 dark:text-gray-300">
-                <i class="fas fa-sliders"></i> إعدادات
+              <button onclick="openSettings()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-sliders"></i> الإعدادات
               </button>
             </div>
 
-            <div class="flex items-center gap-2 max-w-3xl mx-auto">
-              <!-- Fixed mic: toggle click -->
-              <button id="mic-btn" onclick="toggleListening()"
-                class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-white flex items-center justify-center hover:bg-gray-300 transition shadow-sm active:scale-90"
-                title="تشغيل/إيقاف الميكروفون">
-                <i class="fas fa-microphone text-xl"></i>
-              </button>
+            <div class="max-w-3xl mx-auto">
+              <div class="flex items-center gap-2">
+                <!-- إصلاح: زر تشغيل/إيقاف بدل الضغط المطوّل -->
+                <button id="mic-btn" onclick="toggleListening()"
+                  class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-white flex items-center justify-center hover:bg-gray-300 transition shadow-sm active:scale-90">
+                  <i class="fas fa-microphone text-xl"></i>
+                </button>
 
-              <input type="text" id="chat-input"
-                placeholder="اكتب أو استخدم الميكروفون…"
-                class="flex-1 h-12 px-4 rounded-full bg-gray-100 dark:bg-gray-900 border-none focus:ring-2 focus:ring-primary outline-none transition"
-                onkeypress="handleEnter(event)" />
+                <input type="text" id="chat-input"
+                  placeholder="اكتب أو اضغط الميكروفون ثم تكلم..."
+                  class="flex-1 h-12 px-4 rounded-full bg-gray-100 dark:bg-gray-900 border-none focus:ring-2 focus:ring-primary outline-none transition"
+                  onkeypress="handleEnter(event)" />
 
-              <button onclick="processInput()" class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-blue-600 transition shadow-md active:scale-90">
-                <i class="fas fa-paper-plane text-lg"></i>
-              </button>
-            </div>
+                <button onclick="processInput()" class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-blue-600 transition shadow-md active:scale-90">
+                  <i class="fas fa-paper-plane text-lg"></i>
+                </button>
+              </div>
 
-            <div class="max-w-3xl mx-auto mt-2 text-xs text-gray-500 dark:text-gray-400 leading-5">
-              أوامر: <b>جرد</b> — <b>نواقص</b> — <b>بحث: طاولة وسط</b> — <b>كم tv500</b> — <b>اعرض w334</b>
+              <!-- سطر حالة الميكروفون -->
+              <div id="mic-status" class="mt-2 text-xs text-gray-500 dark:text-gray-300 text-center"></div>
             </div>
           </div>
         </section>
 
-        <!-- Inventory -->
+        <!-- 2. المخزون -->
         <section id="tab-inventory" class="h-full flex flex-col hidden p-4 overflow-y-auto pb-24 lg:pb-4">
           <div class="flex justify-between items-center mb-4 sticky top-0 bg-gray-100 dark:bg-gray-900 z-10 py-2">
             <h2 class="text-xl font-bold">📦 المخزون</h2>
             <div class="flex gap-2">
-              <button onclick="exportExcel()" class="bg-green-600 text-white w-10 h-10 rounded-lg shadow flex items-center justify-center">
-                <i class="fas fa-file-excel"></i>
-              </button>
-              <button id="btn-add-modal" onclick="openAddModal()" class="bg-blue-600 text-white w-10 h-10 rounded-lg shadow flex items-center justify-center">
-                <i class="fas fa-plus"></i>
-              </button>
+              <button onclick="exportExcel()" class="bg-green-600 text-white w-10 h-10 rounded-lg shadow flex items-center justify-center"><i class="fas fa-file-excel"></i></button>
+              <button id="btn-add-modal" onclick="openAddModal()" class="bg-blue-600 text-white w-10 h-10 rounded-lg shadow flex items-center justify-center"><i class="fas fa-plus"></i></button>
             </div>
           </div>
-
           <div class="relative mb-4">
             <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
-            <input type="text" id="inventory-search" onkeyup="renderInventory()"
-              placeholder="بحث: موديل/نوع/كلمة (مثال: w334 أو تلفزيون)"
+            <input type="text" id="inventory-search" onkeyup="renderInventory()" placeholder="بحث عن موديل أو نوع..."
               class="w-full p-3 pr-10 rounded-xl border-none shadow-sm dark:bg-gray-800" />
           </div>
-
           <div id="inventory-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
         </section>
 
-        <!-- Stats -->
+        <!-- 3. الإحصائيات -->
         <section id="tab-stats" class="h-full flex flex-col hidden p-4 overflow-y-auto pb-24 lg:pb-4">
           <h2 class="text-xl font-bold mb-4">📊 تقارير</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,9 +213,10 @@
             </div>
           </div>
         </section>
+
       </div>
 
-      <!-- Bottom nav -->
+      <!-- التنقل السفلي (Mobile) -->
       <nav class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex justify-around items-center h-16 shrink-0 z-30 pb-safe">
         <button onclick="switchTab('chat')" class="nav-item active flex flex-col items-center justify-center w-full h-full text-primary">
           <i class="fas fa-comments text-xl mb-1"></i><span class="text-xs font-medium">محادثة</span>
@@ -259,32 +228,28 @@
           <i class="fas fa-chart-pie text-xl mb-1"></i><span class="text-xs font-medium">إحصاء</span>
         </button>
       </nav>
+
     </main>
   </div>
 
-  <!-- Modal: Add/Edit -->
+  <!-- نافذة منبثقة: إدارة منتج -->
   <div id="modal-form" class="fixed inset-0 z-[200] hidden flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-sm shadow-2xl transform transition-all scale-100">
       <h3 class="text-xl font-bold mb-4 text-center">إدارة منتج</h3>
-
       <div class="space-y-3">
-        <input type="text" id="m-model" placeholder="رقم الموديل (مثال w334)"
-          class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none" />
+        <input type="text" id="m-model" placeholder="رقم الموديل (مثال w334)" class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none">
         <select id="m-type" class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none">
           <option value="طاولة وسط">طاولة وسط</option>
           <option value="طاولة تلفزيون">طاولة تلفزيون</option>
           <option value="درسوار">درسوار</option>
         </select>
-        <input type="number" id="m-count" placeholder="العدد"
-          class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none" />
-
+        <input type="number" id="m-count" placeholder="العدد" class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none">
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition relative">
-          <input type="file" id="m-img" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+          <input type="file" id="m-img" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
           <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
           <p class="text-xs text-gray-500">اضغط لرفع صورة</p>
         </div>
       </div>
-
       <div class="flex gap-3 mt-6">
         <button onclick="closeModal()" class="flex-1 py-3 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl font-bold">إلغاء</button>
         <button onclick="saveItem()" class="flex-1 py-3 bg-primary text-white rounded-xl font-bold shadow-lg">حفظ</button>
@@ -292,808 +257,434 @@
     </div>
   </div>
 
-  <!-- Modal: Settings -->
-  <div id="modal-settings" class="fixed inset-0 z-[250] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  <!-- نافذة منبثقة: الإعدادات (نبرة فقط) -->
+  <div id="settings-modal" class="fixed inset-0 z-[250] hidden flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
     <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-2xl">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-bold">⚙️ الإعدادات</h3>
-        <button onclick="closeSettings()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+        <button onclick="closeSettings()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
           <i class="fas fa-times"></i>
         </button>
       </div>
 
-      <div class="space-y-4">
-        <div class="p-4 rounded-xl bg-gray-50 dark:bg-gray-900/40">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="font-bold">🔊 صوت المساعد</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">تحكم بالنبرة والسرعة والصوت الافتراضي.</div>
-            </div>
-            <label class="inline-flex items-center cursor-pointer">
-              <input id="set-tts-enabled" type="checkbox" class="sr-only peer" onchange="saveSettingsFromUI()">
-              <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-primary relative">
-                <div class="absolute top-[2px] right-[2px] bg-white w-5 h-5 rounded-full transition-all peer-checked:translate-x-[-20px]"></div>
-              </div>
-            </label>
-          </div>
+      <div class="bg-gray-50 dark:bg-gray-900/40 rounded-xl p-4">
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
+          التحكم هنا في <b>نبرة الصوت فقط</b> (Pitch).
+        </p>
 
-          <div class="mt-4 space-y-3">
-            <div>
-              <div class="flex justify-between text-sm"><span>السرعة</span><span id="val-rate" class="font-bold">1.00</span></div>
-              <input id="set-rate" type="range" min="0.75" max="1.35" step="0.05" class="w-full"
-                oninput="previewSettingValue('rate')" onchange="saveSettingsFromUI()">
-            </div>
-
-            <div>
-              <div class="flex justify-between text-sm"><span>النبرة</span><span id="val-pitch" class="font-bold">1.00</span></div>
-              <input id="set-pitch" type="range" min="0.8" max="1.35" step="0.05" class="w-full"
-                oninput="previewSettingValue('pitch')" onchange="saveSettingsFromUI()">
-            </div>
-
-            <div>
-              <div class="flex justify-between text-sm"><span>علو الصوت</span><span id="val-volume" class="font-bold">1.00</span></div>
-              <input id="set-volume" type="range" min="0" max="1" step="0.05" class="w-full"
-                oninput="previewSettingValue('volume')" onchange="saveSettingsFromUI()">
-            </div>
-
-            <div>
-              <div class="text-sm mb-1">اختيار الصوت</div>
-              <select id="set-voice" class="w-full p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600"
-                onchange="saveSettingsFromUI()">
-                <option value="">تحميل الأصوات...</option>
-              </select>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">إذا ما فيه صوت عربي، نخلي الافتراضي.</div>
-            </div>
-
-            <div class="flex gap-2">
-              <button onclick="testVoice()" class="flex-1 py-3 rounded-xl bg-secondary text-white font-bold">اختبار</button>
-              <button onclick="resetVoiceSettings()" class="flex-1 py-3 rounded-xl bg-gray-200 dark:bg-gray-700 font-bold">إعادة ضبط</button>
-            </div>
+        <label class="text-sm font-bold block mb-2">نبرة الصوت</label>
+        <div class="flex items-center gap-3">
+          <input id="pitch-slider" type="range" min="0.6" max="1.6" step="0.05"
+                 class="w-full accent-blue-600" oninput="onPitchChange(this.value)">
+          <div class="w-16 text-center bg-white dark:bg-gray-800 rounded-lg py-2 text-sm font-bold">
+            <span id="pitch-value">1.00</span>
           </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-gray-50 dark:bg-gray-900/40">
-          <div class="font-bold">🎙️ الميكروفون</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">اضغط زر الميكروفون لتشغيل/إيقاف. لازم HTTPS.</div>
-
-          <div class="mt-3 space-y-2">
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
-              <span class="text-sm">لغة التعرف</span>
-              <select id="set-stt-lang" class="bg-transparent outline-none" onchange="saveSettingsFromUI()">
-                <option value="ar-SA">ar-SA (سعودي)</option>
-                <option value="ar">ar (عام)</option>
-                <option value="ar-EG">ar-EG (مصري)</option>
-              </select>
-            </label>
-
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
-              <span class="text-sm">إظهار اقتراحات عند عدم الفهم</span>
-              <input id="set-suggestions" type="checkbox" onchange="saveSettingsFromUI()">
-            </label>
-
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
-              <span class="text-sm">تطبيع عربي (أ/إ/آ…)</span>
-              <input id="set-normalize" type="checkbox" onchange="saveSettingsFromUI()">
-            </label>
-          </div>
+        <div class="flex gap-3 mt-4">
+          <button onclick="testVoice()" class="flex-1 py-3 bg-gray-200 dark:bg-gray-700 rounded-xl font-bold">تجربة الصوت</button>
+          <button onclick="resetPitch()" class="flex-1 py-3 bg-primary text-white rounded-xl font-bold shadow-lg">إعادة ضبط</button>
         </div>
 
+        <div class="mt-4 text-xs text-gray-500 dark:text-gray-300 leading-relaxed">
+          <b>حل سريع لو الميكروفون لا يعمل:</b> افتح الموقع عبر HTTPS، ثم من إعدادات المتصفح فعّل إذن الميكروفون للموقع.
+        </div>
       </div>
     </div>
   </div>
 
-<script>
-/* =========================
-   0) Helpers UI
-========================= */
-function $(id){ return document.getElementById(id); }
-function escapeHtml(s){
-  return (s ?? "").toString()
-    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-}
+  <script>
+    // -------------------------
+    // 1) إعدادات عامة
+    // -------------------------
+    const USERS = {
+      1: { name: "حسن", role: "admin", pass: "123", label: "مسؤول" },
+      2: { name: "معتز", role: "viewer", pass: "123", label: "مشاهد" },
+      3: { name: "محمد", role: "manager", pass: "123", label: "مدير" }
+    };
 
-/* =========================
-   1) Users + state
-========================= */
-const USERS = {
-  1: { name: "حسن", role: "admin", pass: "123", label: "مسؤول" },
-  2: { name: "معتز", role: "viewer", pass: "123", label: "مشاهد" },
-  3: { name: "محمد", role: "manager", pass: "123", label: "مدير" }
-};
-let currentUser = null;
-let db;
-let recognition = null;
-let isListening = false;
-let chartInstance = null;
+    let currentUser = null;
+    let db;
+    let chartInstance = null;
 
-/* =========================
-   2) Settings (saved)
-========================= */
-const SETTINGS_KEY = "WarehouseV8Settings";
-const defaultSettings = {
-  // TTS
-  ttsEnabled: true,
-  rate: 1.0,
-  pitch: 1.0,
-  volume: 1.0,
-  voiceURI: "",
+    // -------------------------
+    // 2) إعدادات الصوت (Pitch فقط)
+    // -------------------------
+    const synth = window.speechSynthesis;
+    const VOICE_SETTINGS_KEY = "warehouse_voice_settings_v1";
+    const voiceSettings = { pitch: 1.0 };
 
-  // STT
-  sttLang: "ar-SA",
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 
-  // Smart behavior
-  suggestions: true,
-  normalizeArabic: true,
-};
-let settings = loadSettings();
-
-function loadSettings(){
-  try{
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    if(!raw) return { ...defaultSettings };
-    return { ...defaultSettings, ...JSON.parse(raw) };
-  }catch{ return { ...defaultSettings }; }
-}
-function saveSettings(){
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  updateBadges();
-}
-
-/* =========================
-   3) Environment warning for mic
-========================= */
-(function showEnvWarning(){
-  const isSecure = window.isSecureContext;
-  const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-  if(!isSecure && !isLocalhost) $("env-warning").classList.remove("hidden");
-})();
-
-/* =========================
-   4) IndexedDB
-========================= */
-const request = indexedDB.open("WarehouseV8", 1);
-request.onupgradeneeded = (e) => {
-  db = e.target.result;
-  if (!db.objectStoreNames.contains('inventory')) {
-    const store = db.createObjectStore('inventory', { keyPath: "model" });
-    store.add({ model: "w334", type: "طاولة وسط", count: 15, img: "https://placehold.co/150/png?text=W334" });
-    store.add({ model: "tv500", type: "طاولة تلفزيون", count: 5, img: "https://placehold.co/150/png?text=TV500" });
-    store.add({ model: "ds110", type: "درسوار", count: 2, img: "https://placehold.co/150/png?text=DS110" });
-    store.add({ model: "w120", type: "طاولة وسط", count: 7, img: "https://placehold.co/150/png?text=W120" });
-  }
-  if (!db.objectStoreNames.contains('chats')) {
-    db.createObjectStore('chats', { keyPath: "id", autoIncrement: true });
-  }
-};
-request.onsuccess = (e) => { db = e.target.result; loadChatHistory(); };
-
-/* =========================
-   5) Login + navigation
-========================= */
-function login() {
-  const id = $("user-select").value;
-  const pass = $("password-input").value;
-
-  if (USERS[id] && USERS[id].pass === pass) {
-    currentUser = { ...USERS[id], id: parseInt(id, 10) };
-
-    $("login-screen").classList.add("hidden");
-    $("app-interface").classList.remove("hidden");
-    $("app-interface").classList.add("flex");
-
-    $("user-greeting-pc").innerText = `أهلاً، أستاذ ${currentUser.name}`;
-    $("user-role-pc").innerText = currentUser.label;
-    $("user-greeting-mobile").innerText = `أستاذ ${currentUser.name}`;
-
-    if (currentUser.role === "viewer") $("btn-add-modal").classList.add("hidden");
-
-    initTTS();
-    initSTT();
-    renderInventory();
-    updateStats();
-    updateBadges();
-
-    speak(buildAssistantReply({
-      title: `مرحباً أستاذ ${currentUser.name}`,
-      body: `جاهز. اكتب موديل أو نوع. ويمكنك تشغيل الميكروفون من الزر.`,
-      tips: [`مثال: كم w334`, `مثال: نواقص`, `مثال: طاولة تلفزيون`]
-    }));
-  } else {
-    $("login-error").classList.remove("hidden");
-  }
-}
-function logout(){ location.reload(); }
-
-function switchTab(tabId) {
-  ['chat','inventory','stats'].forEach(id => $(`tab-${id}`).classList.add('hidden'));
-  const active = $(`tab-${tabId}`);
-  active.classList.remove('hidden');
-  active.classList.add('flex');
-  if(tabId === 'stats') updateStats();
-}
-function toggleTheme(){ document.documentElement.classList.toggle('dark'); }
-
-/* =========================
-   6) Settings modal
-========================= */
-function openSettings(){
-  $("modal-settings").classList.remove("hidden");
-  hydrateSettingsUI();
-  refreshVoices(true);
-}
-function closeSettings(){ $("modal-settings").classList.add("hidden"); }
-
-function hydrateSettingsUI(){
-  $("set-tts-enabled").checked = !!settings.ttsEnabled;
-  $("set-rate").value = settings.rate;
-  $("set-pitch").value = settings.pitch;
-  $("set-volume").value = settings.volume;
-  $("set-suggestions").checked = !!settings.suggestions;
-  $("set-normalize").checked = !!settings.normalizeArabic;
-  $("set-stt-lang").value = settings.sttLang;
-
-  $("val-rate").innerText = Number(settings.rate).toFixed(2);
-  $("val-pitch").innerText = Number(settings.pitch).toFixed(2);
-  $("val-volume").innerText = Number(settings.volume).toFixed(2);
-}
-function previewSettingValue(which){
-  if(which==='rate') $("val-rate").innerText = Number($("set-rate").value).toFixed(2);
-  if(which==='pitch') $("val-pitch").innerText = Number($("set-pitch").value).toFixed(2);
-  if(which==='volume') $("val-volume").innerText = Number($("set-volume").value).toFixed(2);
-}
-function saveSettingsFromUI(){
-  settings.ttsEnabled = $("set-tts-enabled").checked;
-  settings.rate = parseFloat($("set-rate").value);
-  settings.pitch = parseFloat($("set-pitch").value);
-  settings.volume = parseFloat($("set-volume").value);
-  settings.voiceURI = $("set-voice").value || "";
-  settings.suggestions = $("set-suggestions").checked;
-  settings.normalizeArabic = $("set-normalize").checked;
-  settings.sttLang = $("set-stt-lang").value || "ar-SA";
-  saveSettings();
-
-  // update STT language live
-  if(recognition) recognition.lang = settings.sttLang;
-}
-function resetVoiceSettings(){
-  settings.ttsEnabled = true;
-  settings.rate = 1.0;
-  settings.pitch = 1.0;
-  settings.volume = 1.0;
-  settings.voiceURI = "";
-  saveSettings();
-  hydrateSettingsUI();
-  refreshVoices(true);
-  speak("تمت إعادة ضبط إعدادات الصوت.");
-}
-function updateBadges(){
-  $("tts-status").innerHTML = settings.ttsEnabled
-    ? `<i class="fas fa-volume-up"></i> الصوت: مفعّل`
-    : `<i class="fas fa-volume-mute"></i> الصوت: متوقف`;
-}
-
-/* =========================
-   7) TTS: better selection + cleaner reading
-========================= */
-const synth = window.speechSynthesis;
-let cachedVoices = [];
-
-function initTTS(){
-  if(!('speechSynthesis' in window)) return;
-  synth.onvoiceschanged = () => refreshVoices();
-  setTimeout(() => refreshVoices(), 200);
-  setTimeout(() => refreshVoices(), 1000);
-}
-function refreshVoices(force=false){
-  if(!('speechSynthesis' in window)) return;
-  const voices = synth.getVoices();
-  if(voices.length === 0 && !force) return;
-  cachedVoices = voices;
-
-  const sel = $("set-voice");
-  if(!sel) return;
-  const prev = settings.voiceURI;
-
-  sel.innerHTML = `<option value="">افتراضي (حسب الجهاز)</option>`;
-
-  const ar = voices.filter(v => (v.lang||'').toLowerCase().startsWith('ar'));
-  const other = voices.filter(v => !(v.lang||'').toLowerCase().startsWith('ar'));
-  [...ar, ...other].forEach(v => {
-    const opt = document.createElement('option');
-    opt.value = v.voiceURI;
-    opt.textContent = `${v.name} — ${v.lang}${v.default ? " (افتراضي)" : ""}`;
-    sel.appendChild(opt);
-  });
-
-  if(prev) sel.value = prev;
-}
-function getSelectedVoice(){
-  if(!settings.voiceURI) return null;
-  return cachedVoices.find(v => v.voiceURI === settings.voiceURI) || null;
-}
-function speak(text){
-  if(!('speechSynthesis' in window)) return;
-  if(!settings.ttsEnabled) return;
-
-  const cleaned = (text || "")
-    .replace(/\s+/g,' ')
-    .replace(/\.\s*\./g,'.')
-    .trim();
-
-  if(!cleaned) return;
-
-  try{
-    if(synth.speaking) synth.cancel();
-
-    const u = new SpeechSynthesisUtterance(cleaned);
-    u.lang = settings.sttLang || 'ar-SA'; // عادة يعطي نطق أقرب
-
-    u.rate = settings.rate;
-    u.pitch = settings.pitch;
-    u.volume = settings.volume;
-
-    const v = getSelectedVoice();
-    if(v) u.voice = v;
-
-    synth.speak(u);
-  }catch{}
-}
-function testVoice(){
-  const name = currentUser?.name || "صديقي";
-  speak(`مرحباً ${name}. هذا اختبار. النبرة والسرعة مضبوطتان.`);
-}
-
-/* =========================
-   8) STT (microphone) FIXED
-   - Toggle start/stop
-   - Better error messages
-========================= */
-function initSTT(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){
-    setSttStatus("غير مدعوم في هذا المتصفح", false);
-    return;
-  }
-  recognition = new SR();
-  recognition.lang = settings.sttLang || 'ar-SA';
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
-
-  recognition.onstart = () => {
-    isListening = true;
-    $("mic-btn").classList.add("mic-active");
-    setSttStatus("يستمع الآن…", true);
-  };
-  recognition.onend = () => {
-    isListening = false;
-    $("mic-btn").classList.remove("mic-active");
-    setSttStatus("متوقف", false);
-  };
-  recognition.onerror = (e) => {
-    isListening = false;
-    $("mic-btn").classList.remove("mic-active");
-
-    // Common errors: not-allowed, service-not-allowed, audio-capture, network, no-speech
-    const msg = ({
-      "not-allowed": "مرفوض: فعّل صلاحية الميكروفون من المتصفح/النظام.",
-      "service-not-allowed": "الخدمة غير مسموحة. جرّب Chrome/Edge أو HTTPS.",
-      "audio-capture": "لا يوجد ميكروفون أو غير متاح.",
-      "network": "مشكلة شبكة (خدمة التعرف تحتاج اتصال).",
-      "no-speech": "لم ألتقط صوتاً. جرّب التحدث بوضوح.",
-      "aborted": "تم الإيقاف."
-    })[e.error] || `خطأ ميكروفون: ${e.error}`;
-
-    setSttStatus(msg, false);
-    addMsg('ai', buildAssistantReply({ title: "مشكلة في الميكروفون", body: msg, tips: [
-      "تأكد أنك على HTTPS أو localhost",
-      "اسمح للميكروفون من إعدادات الموقع",
-      "جرّب Chrome أو Edge"
-    ]}));
-  };
-
-  recognition.onresult = (event) => {
-    const results = event.results?.[0];
-    if(!results) return;
-
-    // pick best transcript
-    let best = "";
-    let bestConf = -1;
-    for(let i=0;i<results.length;i++){
-      const t = results[i].transcript || "";
-      const c = results[i].confidence ?? 0;
-      if(c > bestConf){ bestConf = c; best = t; }
+    function loadVoiceSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(VOICE_SETTINGS_KEY) || "{}");
+        if (typeof saved.pitch === "number") voiceSettings.pitch = clamp(saved.pitch, 0.6, 1.6);
+      } catch (_) {}
+      updatePitchUI();
     }
-    best = (best || "").trim();
-    if(!best) return;
 
-    $("chat-input").value = best;
-    processInput(best);
-  };
-
-  // Initial status
-  setSttStatus("جاهز", false);
-}
-
-function setSttStatus(text, active){
-  $("stt-status").innerHTML = active
-    ? `<i class="fas fa-microphone"></i> الميكروفون: ${escapeHtml(text)}`
-    : `<i class="fas fa-microphone-slash"></i> الميكروفون: ${escapeHtml(text)}`;
-}
-
-async function toggleListening(){
-  if(!recognition){
-    addMsg('ai', buildAssistantReply({
-      title: "الميكروفون غير مدعوم",
-      body: "التعرف على الصوت غير متوفر في هذا المتصفح. جرّب Chrome أو Edge.",
-      tips: ["على iPhone Safari قد لا يعمل", "لازم HTTPS أو localhost"]
-    }));
-    return;
-  }
-
-  // Check secure context
-  const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-  if(!window.isSecureContext && !isLocalhost){
-    addMsg('ai', buildAssistantReply({
-      title: "لا يمكن تشغيل الميكروفون",
-      body: "لازم HTTPS أو localhost لتشغيل الميكروفون في أغلب المتصفحات.",
-      tips: ["شغّل على سيرفر محلي", "أو ارفع الموقع على استضافة HTTPS"]
-    }));
-    return;
-  }
-
-  // Try to pre-request permission (best-effort)
-  try{
-    if(navigator.mediaDevices?.getUserMedia){
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+    function saveVoiceSettings() {
+      localStorage.setItem(VOICE_SETTINGS_KEY, JSON.stringify({ pitch: voiceSettings.pitch }));
     }
-  }catch(err){
-    addMsg('ai', buildAssistantReply({
-      title: "صلاحية الميكروفون مرفوضة",
-      body: "فعّل إذن الميكروفون من إعدادات المتصفح/الجهاز ثم أعد المحاولة.",
-      tips: ["Settings > Site settings > Microphone", "تأكد أن الموقع مسموح"]
-    }));
-    return;
-  }
 
-  // Toggle
-  try{
-    if(isListening){
-      recognition.stop();
-    }else{
-      recognition.start();
+    function openSettings() {
+      updatePitchUI();
+      document.getElementById('settings-modal').classList.remove('hidden');
     }
-  }catch(e){
-    // Some browsers throw if start called too quickly
-    setSttStatus("حاول مرة أخرى بعد ثانية", false);
-  }
-}
+    function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
 
-/* =========================
-   9) Smart understanding (more accurate)
-   - Arabic normalize
-   - synonyms
-   - fuzzy match (edit distance + token scoring)
-   - intents: all, low, count, show, type
-========================= */
-function normalizeArabicText(s){
-  if(!settings.normalizeArabic) return (s||"").toLowerCase().trim();
-  return (s||"")
-    .toLowerCase()
-    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'') // tashkeel
-    .replace(/[إأآا]/g,'ا')
-    .replace(/ى/g,'ي')
-    .replace(/ؤ/g,'و')
-    .replace(/ئ/g,'ي')
-    .replace(/ة/g,'ه')
-    .replace(/ـ/g,'')
-    .replace(/[^\p{L}\p{N}\s]/gu,' ') // remove punctuation
-    .replace(/\s+/g,' ')
-    .trim();
-}
-function tokens(s){ return normalizeArabicText(s).split(' ').filter(Boolean); }
-
-const TYPE_SYNONYMS = {
-  "طاولة وسط": ["طاولة وسط","طاوله وسط","طاولة","طاوله","وسط","ترابيزه وسط","ترابيزه"],
-  "طاولة تلفزيون": ["طاولة تلفزيون","طاوله تلفزيون","تلفزيون","tv","تي في","طاولة tv","طاوله tv","طاولة شاشه","طاولة شاشة","شاشة"],
-  "درسوار": ["درسوار","دريسوار","تسريحه","تسريحه مدخل","كونسول","كونسول مدخل","مدخل"]
-};
-
-// Fuzzy helpers
-function levenshtein(a,b){
-  a = a || ""; b = b || "";
-  const m=a.length,n=b.length;
-  if(!m) return n; if(!n) return m;
-  const dp = Array.from({length:m+1}, (_,i)=>Array(n+1).fill(0));
-  for(let i=0;i<=m;i++) dp[i][0]=i;
-  for(let j=0;j<=n;j++) dp[0][j]=j;
-  for(let i=1;i<=m;i++){
-    for(let j=1;j<=n;j++){
-      const cost = a[i-1]===b[j-1]?0:1;
-      dp[i][j]=Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
+    function updatePitchUI() {
+      const slider = document.getElementById('pitch-slider');
+      const label = document.getElementById('pitch-value');
+      if (!slider || !label) return;
+      slider.value = String(voiceSettings.pitch);
+      label.innerText = voiceSettings.pitch.toFixed(2);
     }
-  }
-  return dp[m][n];
-}
-function similarity(a,b){
-  a = normalizeArabicText(a); b = normalizeArabicText(b);
-  if(!a || !b) return 0;
-  if(a===b) return 1;
-  const dist = levenshtein(a,b);
-  return 1 - dist / Math.max(a.length,b.length);
-}
-function extractModels(raw){
-  const m = (raw||"").match(/[a-z]+\d+/gi);
-  return m ? m.map(x=>x.toLowerCase()) : [];
-}
-function detectTypeFromQuery(qNorm){
-  // returns best matching canonical type or null
-  let best = { type: null, score: 0 };
-  for(const [type, variants] of Object.entries(TYPE_SYNONYMS)){
-    for(const v of variants){
-      if(qNorm.includes(normalizeArabicText(v))){
-        return type; // strong hit
+
+    function onPitchChange(v) {
+      voiceSettings.pitch = clamp(parseFloat(v), 0.6, 1.6);
+      document.getElementById('pitch-value').innerText = voiceSettings.pitch.toFixed(2);
+      saveVoiceSettings();
+    }
+
+    function resetPitch() {
+      voiceSettings.pitch = 1.0;
+      updatePitchUI();
+      saveVoiceSettings();
+      speak("تمت إعادة ضبط نبرة الصوت.");
+    }
+
+    function testVoice() {
+      speak("هذه تجربة لنبرة الصوت الحالية.");
+    }
+
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        if (synth.speaking) synth.cancel();
+        const u = new SpeechSynthesisUtterance(String(text || ""));
+        u.lang = 'ar-SA';
+        u.pitch = voiceSettings.pitch; // فقط
+        u.rate = 1.0;
+        u.volume = 1.0;
+        synth.speak(u);
+      } catch (_) {}
+    }
+
+    // -------------------------
+    // 3) قاعدة البيانات
+    // -------------------------
+    const request = indexedDB.open("WarehouseV7_MicFixed", 1);
+    request.onupgradeneeded = (e) => {
+      db = e.target.result;
+
+      if (!db.objectStoreNames.contains('inventory')) {
+        const store = db.createObjectStore('inventory', { keyPath: "model" });
+        store.add({ model: "w334", type: "طاولة وسط", count: 15, img: "https://placehold.co/150/png?text=W334" });
+        store.add({ model: "tv500", type: "طاولة تلفزيون", count: 5, img: "https://placehold.co/150/png?text=TV500" });
+        store.add({ model: "ds120", type: "درسوار", count: 3, img: "https://placehold.co/150/png?text=DS120" });
       }
-      const s = similarity(qNorm, v);
-      if(s > best.score){
-        best = { type, score: s };
+      if (!db.objectStoreNames.contains('chats')) {
+        db.createObjectStore('chats', { keyPath: "id", autoIncrement: true });
+      }
+    };
+    request.onsuccess = (e) => { db = e.target.result; loadVoiceSettings(); loadChatHistory(); };
+
+    // -------------------------
+    // 4) تسجيل الدخول / تنقل
+    // -------------------------
+    function login() {
+      const id = document.getElementById('user-select').value;
+      const pass = document.getElementById('password-input').value;
+
+      if (USERS[id] && USERS[id].pass === pass) {
+        currentUser = { ...USERS[id], id: parseInt(id) };
+
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-interface').classList.remove('hidden');
+        document.getElementById('app-interface').classList.add('flex');
+
+        document.getElementById('user-greeting-pc').innerText = `أهلاً، أستاذ ${currentUser.name}`;
+        document.getElementById('user-role-pc').innerText = currentUser.label;
+        document.getElementById('user-greeting-mobile').innerText = `أستاذ ${currentUser.name}`;
+
+        if (currentUser.role === 'viewer') document.getElementById('btn-add-modal').classList.add('hidden');
+
+        renderInventory();
+        updateStats();
+        initSpeech();
+
+        speak(`مرحباً أستاذ ${currentUser.name}، النظام جاهز.`);
+        setMicStatus(getMicSupportMessage(), false);
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
       }
     }
-  }
-  return best.score >= 0.72 ? best.type : null;
-}
-function parseIntent(raw){
-  const q = normalizeArabicText(raw);
-  const toks = tokens(raw);
 
-  const isAll = /(الكل|جرد|جرده|inventory|كل الاصناف|كل المنتجات)/.test(q);
-  const isLow = /(ناقص|نواقص|قليل|اقل من|منخفض|تنبيه)/.test(q);
-  const isCount = /(كم|عدد|كميه|كمية)/.test(q);
-  const isShow = /(اعرض|عرض|هات|جيب|طلّع|طلع|وريني|ارني)/.test(q);
+    function logout() { location.reload(); }
 
-  // threshold "اقل من X"
-  let lessThan = null;
-  const m = q.match(/اقل من\s*(\d+)/);
-  if(m) lessThan = parseInt(m[1],10);
+    function switchTab(tabId) {
+      ['chat', 'inventory', 'stats'].forEach(id => document.getElementById(`tab-${id}`).classList.add('hidden'));
+      const activeSection = document.getElementById(`tab-${tabId}`);
+      activeSection.classList.remove('hidden');
+      activeSection.classList.add('flex');
+      if (tabId === 'stats') updateStats();
+    }
 
-  const models = extractModels(raw);
-  const type = detectTypeFromQuery(q);
+    function toggleTheme() { document.documentElement.classList.toggle('dark'); }
 
-  return { q, toks, isAll, isLow, isCount, isShow, lessThan, models, type };
-}
+    // -------------------------
+    // 5) إصلاح الميكروفون (Recognition)
+    // -------------------------
+    let recognition = null;
+    let isListening = false;
+    let stopRequested = false;
 
-function buildAssistantReply({title="", body="", tips=[]}){
-  // نص مقروء جيداً: جمل قصيرة + فواصل واضحة
-  let out = "";
-  if(title) out += `${title}. `;
-  if(body) out += `${body} `;
-  if(tips?.length){
-    out += "اقتراحات: ";
-    out += tips.slice(0,3).map(t=>t.replace(/\.$/,'')).join("، ");
-    out += ".";
-  }
-  return out.replace(/\s+/g,' ').trim();
-}
+    function isSecureContextForMic() {
+      return window.isSecureContext || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    }
 
-function scoreItem(item, intent){
-  const model = (item.model||"").toLowerCase();
-  const type = item.type || "";
-  const q = intent.q;
-  const toks = intent.toks;
+    function hasSpeechRecognition() {
+      return ('SpeechRecognition' in window) || ('webkitSpeechRecognition' in window);
+    }
 
-  let score = 0;
+    function isLikelySafari() {
+      const ua = navigator.userAgent.toLowerCase();
+      const isSafari = ua.includes("safari") && !ua.includes("chrome") && !ua.includes("crios") && !ua.includes("android");
+      return isSafari;
+    }
 
-  // strong: model exact
-  if(intent.models.length && intent.models.includes(model)) score += 120;
-  if(q.includes(model)) score += 80;
-  if(model.startsWith(q) && q.length>=2) score += 50;
+    function getMicSupportMessage() {
+      if (!isSecureContextForMic()) return "الميكروفون يحتاج فتح الموقع عبر HTTPS أو localhost.";
+      if (isLikelySafari() && !hasSpeechRecognition()) return "Safari غالباً لا يدعم التعرف الصوتي (Web Speech). جرّب Chrome/Edge.";
+      if (!hasSpeechRecognition()) return "المتصفح لا يدعم التعرف الصوتي. جرّب Chrome/Edge.";
+      return "اضغط زر الميكروفون للتحدث.";
+    }
 
-  // type hit via synonyms + similarity
-  if(intent.type && item.type === intent.type) score += 70;
+    function setMicStatus(msg, danger=false) {
+      const el = document.getElementById("mic-status");
+      if (!el) return;
+      el.textContent = msg || "";
+      el.className = "mt-2 text-xs text-center " + (danger ? "text-red-500" : "text-gray-500 dark:text-gray-300");
+    }
 
-  // token matches
-  const typeNorm = normalizeArabicText(type);
-  toks.forEach(t=>{
-    if(t.length<2) return;
-    if(model.includes(t)) score += 14;
-    if(typeNorm.includes(t)) score += 16;
-  });
-
-  // fuzzy similarity for short typos (especially model)
-  if(q.length >= 3){
-    score += Math.round(similarity(q, model) * 35);
-    score += Math.round(similarity(q, type) * 25);
-  }
-
-  return score;
-}
-
-/* =========================
-   10) Chat flow
-========================= */
-function handleEnter(e){ if(e.key === 'Enter') processInput(); }
-
-async function processInput(forcedText=null){
-  const input = $("chat-input");
-  const raw = (forcedText ?? input.value ?? "").trim();
-  if(!raw) return;
-
-  addMsg('user', raw);
-  input.value = "";
-
-  const allItems = await getAll();
-  const intent = parseIntent(raw);
-
-  // Intent: all inventory
-  if(intent.isAll){
-    const data = allItems;
-    const reply = buildAssistantReply({
-      title: `تفضل أستاذ ${currentUser.name}`,
-      body: `عدد الأصناف المسجلة: ${data.length}.`
-    });
-    speak(reply);
-    addMsg('ai', reply, data);
-    return;
-  }
-
-  // Intent: low stock
-  if(intent.isLow || intent.lessThan !== null){
-    const th = intent.lessThan ?? 5;
-    const data = allItems.filter(i => (i.count ?? 0) < th);
-    const reply = data.length
-      ? buildAssistantReply({ title: "تنبيه نواقص", body: `وجدت ${data.length} أصناف أقل من ${th}.` })
-      : buildAssistantReply({ title: "تمام", body: `لا توجد أصناف أقل من ${th}.` });
-
-    speak(reply);
-    addMsg('ai', reply, data);
-    return;
-  }
-
-  // Model direct query
-  if(intent.models.length){
-    const found = allItems.filter(i => intent.models.includes((i.model||"").toLowerCase()));
-    if(found.length){
-      let reply = "";
-      if(intent.isCount && found.length === 1){
-        reply = buildAssistantReply({
-          title: "الكمية",
-          body: `الموديل ${found[0].model.toUpperCase()} عدده ${found[0].count}.`
-        });
-      }else{
-        reply = buildAssistantReply({
-          title: `وجدت ${found.length} نتيجة`,
-          body: `هذه الموديلات مطابقة لطلبك.`
-        });
+    async function ensureMicPermission() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("getUserMedia غير مدعوم.");
       }
-      speak(reply);
-      addMsg('ai', reply, found);
-    }else{
-      const reply = buildAssistantReply({
-        title: "لم أجد هذا الموديل",
-        body: `الموديل غير مسجل: ${intent.models.join(", ").toUpperCase()}.`,
-        tips: ["تأكد من كتابة الموديل مثل w334", "جرّب البحث بالنوع مثل طاولة وسط"]
-      });
-      speak(reply);
-      addMsg('ai', reply);
-    }
-    return;
-  }
-
-  // Type direct query
-  if(intent.type){
-    const data = allItems.filter(i => i.type === intent.type);
-    const reply = data.length
-      ? buildAssistantReply({ title: "نتائج حسب النوع", body: `نوع: ${intent.type}. عدد النتائج: ${data.length}.` })
-      : buildAssistantReply({ title: "لا توجد نتائج", body: `لا يوجد منتجات من نوع ${intent.type}.` });
-
-    speak(reply);
-    addMsg('ai', reply, data);
-    return;
-  }
-
-  // Ranked fuzzy search
-  const ranked = allItems
-    .map(item => ({ item, score: scoreItem(item, intent) }))
-    .filter(x => x.score >= 25)
-    .sort((a,b)=> b.score - a.score);
-
-  if(ranked.length){
-    const data = ranked.slice(0, 12).map(x=>x.item);
-
-    // If user asked count but query was generic, try to answer if top is very confident
-    const top = ranked[0];
-    let reply = "";
-    if(intent.isCount && top.score >= 90){
-      reply = buildAssistantReply({
-        title: "أقرب نتيجة",
-        body: `الموديل ${top.item.model.toUpperCase()} عدده ${top.item.count}.`
-      });
-    }else{
-      reply = buildAssistantReply({
-        title: "وجدت نتائج قريبة",
-        body: `هذه أقرب النتائج لطلبك. لو تكتب موديل أدق تكون النتيجة أفضل.`
-      });
+      // يطلب الإذن (حتى لو لن نستخدم الستريم)
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(t => t.stop());
+      return true;
     }
 
-    speak(reply);
-    addMsg('ai', reply, data);
-    return;
-  }
+    function initSpeech() {
+      // لا تجهز على متصفح غير مدعوم
+      if (!hasSpeechRecognition()) return;
 
-  // Not understood
-  const reply = settings.suggestions
-    ? buildAssistantReply({
-        title: `لم أفهم الطلب`,
-        body: `جرّب كتابة موديل أو نوع.`,
-        tips: ["كم w334", "نواقص", "جرد", "طاولة تلفزيون", "درسوار"]
-      })
-    : `لم أفهم.`;
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR();
+      recognition.lang = 'ar-SA';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
 
-  speak(reply);
-  addMsg('ai', reply);
-}
+      recognition.onstart = () => {
+        isListening = true;
+        stopRequested = false;
+        document.getElementById('mic-btn').classList.add('mic-active');
+        setMicStatus("يستمع الآن... تكلم بوضوح.", false);
+      };
 
-function addMsg(sender, text, data=[]){
-  const box = $("chat-box");
-  const div = document.createElement('div');
-  div.className = `flex ${sender==='user' ? 'justify-end' : 'justify-start'} animate-fade-in`;
+      recognition.onend = () => {
+        document.getElementById('mic-btn').classList.remove('mic-active');
+        isListening = false;
 
-  const safeText = escapeHtml(text).replaceAll("\n","<br>");
-  let html = `<div class="max-w-[85%] p-3 rounded-2xl ${sender==='user'
-    ? 'bg-primary text-white rounded-br-none'
-    : 'bg-white dark:bg-gray-700 shadow rounded-bl-none'}">
-      <p class="text-sm md:text-base leading-6">${safeText}</p>`;
+        // إذا المستخدم ضغط إيقاف لا نعيد التشغيل
+        if (stopRequested) {
+          setMicStatus("تم إيقاف الاستماع.", false);
+          return;
+        }
+        // لو انتهى بدون نتيجة، أعطي رسالة بسيطة
+        setMicStatus("انتهى الاستماع. اضغط الميكروفون للتحدث مرة أخرى.", false);
+      };
 
-  if(data?.length){
-    html += `<div class="mt-2 grid grid-cols-2 gap-2">`;
-    data.forEach(i=>{
-      html += `<div class="bg-gray-50 dark:bg-gray-600 p-2 rounded border border-gray-100 dark:border-gray-500 text-center">
-        <img src="${i.img}" class="w-full h-16 object-cover rounded mb-1" alt="img">
-        <div class="text-xs font-bold text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</div>
-        <div class="text-xs text-gray-500 dark:text-gray-300 mb-1">${escapeHtml(i.type||'')}</div>
-        <div class="text-green-600 font-bold">${escapeHtml(i.count)}</div>
-      </div>`;
-    });
-    html += `</div>`;
-  }
+      recognition.onerror = (event) => {
+        document.getElementById('mic-btn').classList.remove('mic-active');
+        isListening = false;
 
-  html += `</div>`;
-  div.innerHTML = html;
-  box.appendChild(div);
-  box.scrollTop = box.scrollHeight;
+        const code = event.error || "";
+        if (code === "not-allowed" || code === "service-not-allowed") {
+          setMicStatus("تم رفض إذن الميكروفون. فعّل الإذن من إعدادات المتصفح للموقع.", true);
+        } else if (code === "no-speech") {
+          setMicStatus("لم أسمع صوتاً. جرّب التحدث أقرب للميكروفون.", true);
+        } else if (code === "audio-capture") {
+          setMicStatus("لا يوجد ميكروفون متاح أو مشغول بتطبيق آخر.", true);
+        } else if (code === "network") {
+          setMicStatus("خطأ شبكة في خدمة التعرف الصوتي. جرّب لاحقاً.", true);
+        } else {
+          setMicStatus("حدث خطأ في الميكروفون: " + code, true);
+        }
+      };
 
-  if(db){
-    const tx = db.transaction("chats","readwrite");
-    tx.objectStore("chats").add({ sender, text, data, time: new Date() });
-  }
-}
+      recognition.onresult = (event) => {
+        const text = event.results?.[0]?.[0]?.transcript || "";
+        if (!text.trim()) return;
+        document.getElementById('chat-input').value = text;
+        processInput(text);
+      };
+    }
 
-function loadChatHistory(){
-  if(!db) return;
-  const tx = db.transaction("chats","readonly");
-  tx.objectStore("chats").getAll().onsuccess = (e)=>{
-    const box = $("chat-box");
-    box.innerHTML = "";
-    (e.target.result||[]).forEach(msg=>{
-      // render without re-saving
+    async function toggleListening() {
+      if (!isSecureContextForMic()) {
+        setMicStatus("لن يعمل الميكروفون على HTTP. افتح الصفحة عبر HTTPS.", true);
+        return;
+      }
+      if (!hasSpeechRecognition()) {
+        setMicStatus(getMicSupportMessage(), true);
+        return;
+      }
+      if (!recognition) initSpeech();
+
+      if (isListening) {
+        stopRequested = true;
+        try { recognition.stop(); } catch(_) {}
+        return;
+      }
+
+      // بدء الاستماع: اطلب الإذن أولاً
+      try {
+        await ensureMicPermission();
+      } catch (e) {
+        setMicStatus("لا يمكن طلب إذن الميكروفون: " + (e?.message || "خطأ"), true);
+        return;
+      }
+
+      // ابدأ التعرف
+      try {
+        recognition.start();
+      } catch (e) {
+        // خطأ شائع: start called twice
+        setMicStatus("تعذر بدء الاستماع. جرّب مرة أخرى.", true);
+      }
+    }
+
+    // -------------------------
+    // 6) ذكاء المحادثة (بسيط)
+    // -------------------------
+    function handleEnter(e) { if (e.key === 'Enter') processInput(); }
+
+    function normalizeArabic(s) {
+      if (!s) return "";
+      return s.toString().toLowerCase()
+        .replace(/[\u064B-\u0652]/g, "")
+        .replace(/[إأآا]/g, "ا")
+        .replace(/ى/g, "ي")
+        .replace(/ؤ/g, "و")
+        .replace(/ئ/g, "ي")
+        .replace(/ة/g, "ه")
+        .replace(/ـ/g, "")
+        .replace(/[^\p{L}\p{N}\s]/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function extractModels(raw) {
+      const m = raw.match(/[a-z]{1,5}\d{1,6}/gi);
+      return m ? [...new Set(m.map(x => x.toLowerCase()))] : [];
+    }
+
+    function bestTypeFromText(textNorm) {
+      const map = [
+        { type: "طاولة وسط", keys: ["طاولة وسط", "طاوله وسط", "وسط"] },
+        { type: "طاولة تلفزيون", keys: ["طاولة تلفزيون", "طاوله تلفزيون", "تلفزيون", "تي في", "tv"] },
+        { type: "درسوار", keys: ["درسوار", "دريسوار", "تسريحه", "كونسول"] }
+      ];
+      for (const row of map) {
+        if (row.keys.map(normalizeArabic).some(k => textNorm.includes(k))) return row.type;
+      }
+      return null;
+    }
+
+    async function processInput(forcedText = null) {
+      const input = document.getElementById('chat-input');
+      const text = forcedText || input.value.trim();
+      if (!text) return;
+
+      addMsg('user', text);
+      input.value = '';
+
+      const textNorm = normalizeArabic(text);
+      const allItems = await getAll();
+
+      const wantsAll = ["الكل","جرد","اعرض المخزون","عرض المخزون"].some(k => textNorm.includes(normalizeArabic(k)));
+      const wantsLow = ["ناقص","نواقص","تنبيه"].some(k => textNorm.includes(normalizeArabic(k)));
+      const asksCount = ["كم","عدد","العدد","كمية","كميه"].some(k => textNorm.includes(normalizeArabic(k)));
+
+      const modelsFound = extractModels(textNorm);
+      const typeFound = bestTypeFromText(textNorm);
+
+      let response = "";
+      let data = [];
+
+      if (modelsFound.length) {
+        data = allItems.filter(i => modelsFound.includes((i.model || "").toLowerCase()));
+        if (data.length) {
+          if (asksCount && data.length === 1) response = `الموديل ${data[0].model.toUpperCase()} عدده ${data[0].count}.`;
+          else response = `وجدت ${data.length} نتيجة للموديلات المطلوبة:`;
+        } else {
+          response = `لم أجد هذه الموديلات في قاعدة البيانات.`;
+        }
+      } else if (typeFound) {
+        data = allItems.filter(i => i.type === typeFound);
+        if (data.length) {
+          const total = data.reduce((s,x) => s + (Number(x.count) || 0), 0);
+          response = asksCount ? `إجمالي "${typeFound}" هو ${total}.` : `هذه منتجات "${typeFound}":`;
+        } else response = `لا توجد منتجات من نوع "${typeFound}".`;
+      } else if (wantsAll) {
+        data = allItems;
+        response = `لديك ${data.length} صنف في المستودع.`;
+      } else if (wantsLow) {
+        data = allItems.filter(i => (Number(i.count) || 0) < 5);
+        response = data.length ? `يوجد ${data.length} صنف ناقص (أقل من 5).` : `لا توجد نواقص حالياً.`;
+      } else {
+        response = `لم أفهم. جرّب: "كم w334" أو "نواقص" أو "طاولة وسط".`;
+      }
+
+      speak(response);
+      addMsg('ai', response, data);
+    }
+
+    // -------------------------
+    // 7) الشات + تخزينه
+    // -------------------------
+    function escapeHtml(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+    function escapeAttr(s) { return escapeHtml(s); }
+
+    function addMsg(sender, text, data = []) {
+      const box = document.getElementById('chat-box');
       const div = document.createElement('div');
-      div.className = `flex ${msg.sender==='user' ? 'justify-end' : 'justify-start'}`;
-      const safeText = escapeHtml(msg.text).replaceAll("\n","<br>");
+      div.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} fade-in`;
 
-      let html = `<div class="max-w-[85%] p-3 rounded-2xl ${msg.sender==='user'
-        ? 'bg-primary text-white rounded-br-none'
-        : 'bg-white dark:bg-gray-700 shadow rounded-bl-none'}">
-        <p class="text-sm md:text-base leading-6">${safeText}</p>`;
+      let html = `<div class="max-w-[85%] p-3 rounded-2xl ${sender === 'user' ? 'bg-primary text-white rounded-br-none' : 'bg-white dark:bg-gray-700 shadow rounded-bl-none'}">
+        <p class="text-sm md:text-base leading-relaxed">${escapeHtml(text)}</p>`;
 
-      if(msg.data?.length){
+      if (data.length) {
         html += `<div class="mt-2 grid grid-cols-2 gap-2">`;
-        msg.data.forEach(i=>{
+        data.forEach(i => {
           html += `<div class="bg-gray-50 dark:bg-gray-600 p-2 rounded border border-gray-100 dark:border-gray-500 text-center">
-            <img src="${i.img}" class="w-full h-16 object-cover rounded mb-1" alt="img">
-            <div class="text-xs font-bold text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</div>
-            <div class="text-xs text-gray-500 dark:text-gray-300 mb-1">${escapeHtml(i.type||'')}</div>
-            <div class="text-green-600 font-bold">${escapeHtml(i.count)}</div>
+            <img src="${escapeAttr(i.img)}" class="w-full h-16 object-cover rounded mb-1 bg-gray-100">
+            <div class="text-xs font-bold text-gray-800 dark:text-white">${escapeHtml(String(i.model || "").toUpperCase())}</div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-200 mb-1">${escapeHtml(String(i.type || ""))}</div>
+            <div class="text-green-600 font-bold">${escapeHtml(String(i.count ?? ""))}</div>
           </div>`;
         });
         html += `</div>`;
@@ -1102,159 +693,187 @@ function loadChatHistory(){
       html += `</div>`;
       div.innerHTML = html;
       box.appendChild(div);
-    });
-    box.scrollTop = box.scrollHeight;
-  };
-}
+      box.scrollTop = box.scrollHeight;
 
-function clearChat(){
-  if(!db) return;
-  const tx = db.transaction("chats","readwrite");
-  tx.objectStore("chats").clear();
-  $("chat-box").innerHTML = "";
-}
+      const tx = db.transaction("chats", "readwrite");
+      tx.objectStore("chats").add({ sender, text, data, time: new Date().toISOString() });
+    }
 
-/* =========================
-   11) Inventory
-========================= */
-async function getAll(){
-  return new Promise(res=>{
-    if(!db) return res([]);
-    db.transaction("inventory","readonly").objectStore("inventory").getAll().onsuccess = e => res(e.target.result || []);
-  });
-}
-async function renderInventory(){
-  const items = await getAll();
-  const q = normalizeArabicText($("inventory-search").value || "");
-  const grid = $("inventory-grid");
-  grid.innerHTML = "";
+    function loadChatHistory() {
+      if (!db) return;
+      const tx = db.transaction("chats", "readonly");
+      tx.objectStore("chats").getAll().onsuccess = (e) => {
+        const box = document.getElementById('chat-box');
+        box.innerHTML = '';
+        (e.target.result || []).forEach(msg => {
+          const div = document.createElement('div');
+          div.className = `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`;
+          div.innerHTML = `<div class="max-w-[85%] p-3 rounded-2xl ${msg.sender === 'user' ? 'bg-primary text-white rounded-br-none' : 'bg-white dark:bg-gray-700 shadow rounded-bl-none'}">
+            <p class="text-sm md:text-base leading-relaxed">${escapeHtml(msg.text)}</p>
+          </div>`;
+          box.appendChild(div);
+        });
+        box.scrollTop = box.scrollHeight;
+      };
+    }
 
-  const filtered = items.filter(i=>{
-    if(!q) return true;
-    const model = (i.model||"").toLowerCase();
-    const type = normalizeArabicText(i.type||"");
-    return model.includes(q) || type.includes(q) || similarity(q, model) >= 0.72 || similarity(q, type) >= 0.72;
-  });
+    function clearChat() {
+      const tx = db.transaction("chats", "readwrite");
+      tx.objectStore("chats").clear();
+      document.getElementById('chat-box').innerHTML = '';
+      speak("تم مسح المحادثة.");
+    }
 
-  filtered.forEach(i=>{
-    const isLow = (i.count ?? 0) < 5;
-    grid.innerHTML += `
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-3 relative border-t-4 ${isLow ? 'border-red-500' : 'border-green-500'}">
-        <img src="${i.img}" class="w-full h-24 object-cover rounded bg-gray-100 mb-2" alt="img">
-        <div class="flex justify-between items-start">
-          <div>
-            <h3 class="font-bold text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</h3>
-            <p class="text-xs text-gray-500">${escapeHtml(i.type||'')}</p>
-          </div>
-          <span class="text-lg font-bold text-primary">${escapeHtml(i.count)}</span>
-        </div>
+    // -------------------------
+    // 8) المخزون
+    // -------------------------
+    async function getAll() {
+      return new Promise(r => {
+        db.transaction("inventory", "readonly").objectStore("inventory").getAll().onsuccess = e => r(e.target.result || []);
+      });
+    }
 
-        ${currentUser?.role !== 'viewer' ? `
-        <div class="mt-2 flex justify-end gap-2 border-t pt-2 dark:border-gray-700">
-          <button onclick="editItem('${i.model}')" class="text-blue-500 text-sm" title="تعديل"><i class="fas fa-edit"></i></button>
-          ${currentUser?.role === 'admin' ? `<button onclick="delItem('${i.model}')" class="text-red-500 text-sm" title="حذف"><i class="fas fa-trash"></i></button>` : ''}
-        </div>` : ''}
-      </div>`;
-  });
-}
+    async function renderInventory() {
+      const items = await getAll();
+      const search = normalizeArabic(document.getElementById('inventory-search').value);
+      const grid = document.getElementById('inventory-grid');
+      grid.innerHTML = '';
 
-function openAddModal(){ $("modal-form").classList.remove("hidden"); }
-function closeModal(){ $("modal-form").classList.add("hidden"); }
+      const filtered = items.filter(i => {
+        const model = normalizeArabic(i.model);
+        const type = normalizeArabic(i.type);
+        return !search || model.includes(search) || type.includes(search);
+      });
 
-function saveItem(){
-  const model = ($("m-model").value || "").trim().toLowerCase();
-  const type = $("m-type").value;
-  const count = parseInt($("m-count").value, 10);
-  const imgInput = $("m-img");
+      filtered.forEach(i => {
+        const isLow = (Number(i.count) || 0) < 5;
+        grid.innerHTML += `
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-3 relative border-t-4 ${isLow ? 'border-red-500' : 'border-green-500'}">
+            <img src="${escapeAttr(i.img)}" class="w-full h-24 object-cover rounded bg-gray-100 mb-2">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-bold text-gray-800 dark:text-white">${escapeHtml(String(i.model).toUpperCase())}</h3>
+                <p class="text-xs text-gray-500">${escapeHtml(String(i.type))}</p>
+              </div>
+              <span class="text-lg font-bold text-primary">${escapeHtml(String(i.count))}</span>
+            </div>
 
-  if(!model || Number.isNaN(count)) return alert("البيانات ناقصة");
+            ${currentUser.role !== 'viewer' ? `
+              <div class="mt-2 flex justify-end gap-2 border-t pt-2 dark:border-gray-700">
+                <button onclick="editItem('${escapeAttr(i.model)}')" class="text-blue-500 text-sm"><i class="fas fa-edit"></i></button>
+                ${currentUser.role === 'admin' ? `<button onclick="delItem('${escapeAttr(i.model)}')" class="text-red-500 text-sm"><i class="fas fa-trash"></i></button>` : ''}
+              </div>
+            ` : ''}
+          </div>`;
+      });
+    }
 
-  const reader = new FileReader();
-  reader.onload = e=>{
-    const img = imgInput.files[0] ? e.target.result : `https://placehold.co/150/png?text=${model.toUpperCase()}`;
-    const tx = db.transaction("inventory","readwrite");
-    tx.objectStore("inventory").put({ model, type, count, img });
-    tx.oncomplete = ()=>{ closeModal(); renderInventory(); updateStats(); speak("تم الحفظ."); };
-  };
-  if(imgInput.files[0]) reader.readAsDataURL(imgInput.files[0]);
-  else reader.onload({target:{result:null}});
-}
+    function openAddModal() {
+      document.getElementById('m-model').value = "";
+      document.getElementById('m-count').value = "";
+      document.getElementById('m-img').value = "";
+      document.getElementById('modal-form').classList.remove('hidden');
+    }
+    function closeModal() { document.getElementById('modal-form').classList.add('hidden'); }
 
-function delItem(model){
-  if(!confirm("حذف هذا المنتج؟")) return;
-  const tx = db.transaction("inventory","readwrite");
-  tx.objectStore("inventory").delete(model);
-  tx.oncomplete = ()=>{ renderInventory(); updateStats(); };
-}
+    function saveItem() {
+      const model = (document.getElementById('m-model').value || "").trim().toLowerCase();
+      const type = document.getElementById('m-type').value;
+      const count = parseInt(document.getElementById('m-count').value, 10);
+      const imgInput = document.getElementById('m-img');
 
-function editItem(model){
-  db.transaction("inventory","readonly").objectStore("inventory").get(model).onsuccess = e=>{
-    const i = e.target.result;
-    if(!i) return;
-    $("m-model").value = i.model;
-    $("m-type").value = i.type;
-    $("m-count").value = i.count;
-    openAddModal();
-  };
-}
+      if (!model || Number.isNaN(count)) return alert("البيانات ناقصة");
 
-/* =========================
-   12) Stats + export
-========================= */
-async function updateStats(){
-  const items = await getAll();
-  const types = {};
-  const low = [];
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = imgInput.files[0] ? e.target.result : `https://placehold.co/150/png?text=${encodeURIComponent(model.toUpperCase())}`;
+        const tx = db.transaction("inventory", "readwrite");
+        tx.objectStore("inventory").put({ model, type, count, img });
+        tx.oncomplete = () => { closeModal(); renderInventory(); updateStats(); speak("تم الحفظ."); };
+      };
 
-  items.forEach(i=>{
-    const t = i.type || "غير مصنف";
-    types[t] = (types[t]||0) + (i.count||0);
-    if((i.count||0) < 5) low.push(i);
-  });
+      if (imgInput.files[0]) reader.readAsDataURL(imgInput.files[0]);
+      else reader.onload({ target: { result: null } });
+    }
 
-  if(chartInstance) chartInstance.destroy();
-  if($("typeChart")){
-    chartInstance = new Chart($("typeChart"), {
-      type: 'doughnut',
-      data: { labels: Object.keys(types),
-        datasets: [{ data: Object.values(types), backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6'] }]
-      },
-      options: { responsive:true, maintainAspectRatio:false }
-    });
-  }
+    function delItem(model) {
+      if (confirm("حذف؟")) {
+        const tx = db.transaction("inventory", "readwrite");
+        tx.objectStore("inventory").delete(model);
+        tx.oncomplete = () => { renderInventory(); updateStats(); speak("تم الحذف."); };
+      }
+    }
 
-  const alerts = $("stock-alerts");
-  if(alerts){
-    alerts.innerHTML = low.length ? "" : '<p class="text-green-500 text-sm">المخزون ممتاز</p>';
-    low.forEach(i=>{
-      alerts.innerHTML += `<div class="flex justify-between p-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded text-sm">
-        <span>${escapeHtml(i.model)}</span><b>${escapeHtml(i.count)}</b>
-      </div>`;
-    });
-  }
-}
+    function editItem(model) {
+      db.transaction("inventory").objectStore("inventory").get(model).onsuccess = e => {
+        const i = e.target.result;
+        document.getElementById('m-model').value = i.model;
+        document.getElementById('m-type').value = i.type;
+        document.getElementById('m-count').value = i.count;
+        document.getElementById('m-img').value = "";
+        document.getElementById('modal-form').classList.remove('hidden');
+      };
+    }
 
-async function exportExcel(){
-  const items = await getAll();
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(items), "Inventory");
-  XLSX.writeFile(wb, "Warehouse.xlsx");
-}
+    // -------------------------
+    // 9) الإحصائيات + التصدير
+    // -------------------------
+    async function updateStats() {
+      const items = await getAll();
+      const types = {};
+      const low = [];
 
-function exportChatPDF(){
-  html2canvas($("chat-box")).then(c=>{
-    const pdf = new window.jspdf.jsPDF();
-    const img = c.toDataURL('image/png');
-    const props = pdf.getImageProperties(img);
-    const w = pdf.internal.pageSize.getWidth();
-    const h = (props.height * w) / props.width;
-    pdf.addImage(img, 'PNG', 0, 0, w, h);
-    pdf.save("chat.pdf");
-  });
-}
-function shareWhatsApp(){
-  window.open("https://wa.me/?text=" + encodeURIComponent("تقرير المستودع جاهز"), "_blank");
-}
-</script>
+      items.forEach(i => {
+        const t = i.type || "غير مصنف";
+        types[t] = (types[t] || 0) + (Number(i.count) || 0);
+        if ((Number(i.count) || 0) < 5) low.push(i);
+      });
+
+      const canvas = document.getElementById('typeChart');
+      if (canvas) {
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(canvas, {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(types),
+            datasets: [{ data: Object.values(types), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#a855f7', '#ef4444'] }]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      }
+
+      const alerts = document.getElementById('stock-alerts');
+      if (!alerts) return;
+      alerts.innerHTML = low.length ? '' : '<p class="text-green-500 text-sm">المخزون ممتاز</p>';
+      low.forEach(i => {
+        alerts.innerHTML += `<div class="flex justify-between p-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded text-sm">
+          <span>${escapeHtml(i.model)}</span><b>${escapeHtml(String(i.count))}</b>
+        </div>`;
+      });
+    }
+
+    async function exportExcel() {
+      const items = await getAll();
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(items), "Inventory");
+      XLSX.writeFile(wb, "Warehouse.xlsx");
+    }
+
+    function exportChatPDF() {
+      html2canvas(document.getElementById('chat-box')).then(c => {
+        const pdf = new window.jspdf.jsPDF();
+        const imgData = c.toDataURL('image/png');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save("chat.pdf");
+      });
+    }
+
+    function shareWhatsApp() {
+      window.open("https://wa.me/?text=" + encodeURIComponent("تقرير المستودع جاهز"), '_blank');
+    }
+  </script>
 </body>
 </html>
