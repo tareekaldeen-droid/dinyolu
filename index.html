@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>نظام المستودع الذكي Pro V7 (Mic Fixed)</title>
+  <title>نظام المستودع الذكي Pro V7 (Updated)</title>
 
   <!-- المكتبات الخارجية -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -628,7 +628,19 @@
       let response = "";
       let data = [];
 
-      if (modelsFound.length) {
+      // ----------------------------------------------------
+      // التعديل هنا: إضافة الردود الخاصة المطلوبة
+      // ----------------------------------------------------
+      if (textNorm.includes("مرحبا") || textNorm.includes("اهلا")) {
+        response = "كيف حالك";
+      }
+      else if (textNorm.includes("من صنعك") || textNorm.includes("مين عملك") || textNorm.includes("مين برمجك")) {
+        response = "المهندس معتز بالله حاج شعبان من واو موبيليا";
+      }
+      // ----------------------------------------------------
+      // نهاية التعديل
+      // ----------------------------------------------------
+      else if (modelsFound.length) {
         data = allItems.filter(i => modelsFound.includes((i.model || "").toLowerCase()));
         if (data.length) {
           if (asksCount && data.length === 1) response = `الموديل ${data[0].model.toUpperCase()} عدده ${data[0].count}.`;
