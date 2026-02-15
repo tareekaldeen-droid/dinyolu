@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>نظام المستودع الذكي Pro V9 - Ultimate Edition</title>
+  <title>نظام المستودع الذكي Pro V8 (Smart + Fixed Mic)</title>
 
   <!-- Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,269 +12,129 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          colors: { 
-            primary: '#2563eb', 
-            secondary: '#10b981', 
-            dark: '#1e293b',
-            accent: '#f59e0b'
-          },
-          height: { 'screen-dvh': '100dvh' },
-          animation: {
-            'slide-in': 'slideIn 0.3s ease-out',
-            'bounce-soft': 'bounceSoft 0.5s ease-in-out',
-            'glow': 'glow 2s ease-in-out infinite'
-          }
+          colors: { primary: '#2563eb', secondary: '#10b981', dark: '#1e293b' },
+          height: { 'screen-dvh': '100dvh' }
         }
       }
     }
   </script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
-    body { 
-      font-family: 'Tajawal', sans-serif; 
-      overflow: hidden; 
-      touch-action: manipulation;
-      -webkit-font-smoothing: antialiased;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+    body { font-family: 'Tajawal', sans-serif; overflow: hidden; touch-action: manipulation; }
 
-    /* Animations */
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes bounceSoft {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.5); }
-      50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.8); }
-    }
+    .mic-active { animation: pulse-red 1.2s infinite; background-color: #ef4444 !important; color: white !important; }
     @keyframes pulse-red {
-      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65); }
       70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
       100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
-    .mic-active { 
-      animation: pulse-red 1.2s infinite; 
-      background-color: #ef4444 !important; 
-      color: white !important; 
-    }
-
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     .dark ::-webkit-scrollbar-thumb { background: #475569; }
 
     .animate-fade-in { animation: fadeIn 220ms ease-out; }
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(6px); } 
-      to { opacity: 1; transform: translateY(0); } 
-    }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(6px)} to {opacity:1; transform:translateY(0)} }
 
-    .chip { 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 0.35rem; 
-      padding: 0.35rem 0.65rem; 
-      border-radius: 9999px; 
-      font-size: 0.75rem; 
-    }
-
-    /* Notification Toast */
-    .toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-100px);
-      z-index: 9999;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      animation: slideDown 0.3s ease-out forwards;
-      min-width: 300px;
-      max-width: 90%;
-    }
-    @keyframes slideDown {
-      to { transform: translateX(-50%) translateY(0); }
-    }
-
-    /* Print styles */
-    @media print {
-      body * { visibility: hidden; }
-      #print-area, #print-area * { visibility: visible; }
-      #print-area { position: absolute; left: 0; top: 0; width: 100%; }
-    }
-
-    /* Card hover effect */
-    .card-hover {
-      transition: all 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-    }
-
-    /* Stats counter animation */
-    .counter {
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* Loading spinner */
-    .spinner {
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .65rem; border-radius:9999px; font-size:.75rem; }
   </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 h-screen-dvh w-full flex flex-col">
 
-  <!-- Toast Container -->
-  <div id="toast-container"></div>
-
-  <!-- Login Screen -->
-  <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
-    <div class="absolute inset-0 bg-black opacity-50"></div>
-    <div class="relative bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-[90%] max-w-md animate-bounce-soft">
-      <div class="mb-6 bg-gradient-to-br from-blue-500 to-indigo-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto text-white shadow-lg">
+  <!-- Login -->
+  <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900 bg-opacity-95 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-[90%] max-w-md text-center">
+      <div class="mb-6 bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto text-primary">
         <i class="fas fa-boxes text-4xl"></i>
       </div>
-      <h2 class="text-3xl font-black mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">نظام المستودع الذكي</h2>
-      <p class="text-gray-500 mb-6 text-sm">الإصدار 9.0 Ultimate Edition</p>
+      <h2 class="text-2xl font-bold mb-2">نظام المستودع الذكي</h2>
+      <p class="text-gray-500 mb-6 text-sm">أدخل بياناتك للمتابعة</p>
 
       <div class="space-y-4">
-        <select id="user-select" class="w-full p-4 bg-gray-50 border-2 border-gray-200 rounded-xl dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition">
+        <select id="user-select" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none">
           <option value="1">👤 حسن (مسؤول - Admin)</option>
           <option value="2">👀 معتز (عرض فقط)</option>
           <option value="3">📦 محمد (مدير مستودع)</option>
         </select>
 
         <input type="password" id="password-input" placeholder="كلمة المرور (123)"
-          class="w-full p-4 bg-gray-50 border-2 border-gray-200 rounded-xl dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition" />
+          class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none" />
 
-        <button onclick="login()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl transition shadow-lg transform active:scale-95 flex items-center justify-center gap-2">
-          <i class="fas fa-sign-in-alt"></i>
-          <span>تسجيل الدخول</span>
+        <button onclick="login()" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg transform active:scale-95">
+          تسجيل الدخول
         </button>
       </div>
 
       <div id="env-warning" class="mt-4 text-xs text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-xl p-3 hidden text-right">
-        <div class="font-bold mb-1">⚠️ تنبيه مهم للميكروفون</div>
+        <div class="font-bold mb-1">تنبيه مهم للميكروفون</div>
         <div>الميكروفون يعمل عادةً فقط على <b>HTTPS</b> أو <b>localhost</b>. شغّل الملف على سيرفر محلي/استضافة آمنة.</div>
       </div>
 
-      <p id="login-error" class="text-red-500 mt-4 text-sm hidden font-bold text-center">⚠️ كلمة المرور غير صحيحة</p>
+      <p id="login-error" class="text-red-500 mt-4 text-sm hidden font-bold">⚠️ كلمة المرور غير صحيحة</p>
     </div>
   </div>
 
-  <!-- App Interface -->
+  <!-- App -->
   <div id="app-interface" class="flex h-full w-full hidden relative">
 
-    <!-- Sidebar (Desktop) -->
+    <!-- Sidebar (PC) -->
     <aside class="hidden lg:flex w-72 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex-col shadow-xl z-20">
-      <!-- User Profile -->
-      <div class="p-6 border-b dark:border-gray-700">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-lg">
-            <i class="fas fa-user"></i>
-          </div>
-          <div class="flex-1">
-            <h3 id="user-greeting-pc" class="font-bold text-gray-800 dark:text-white">مرحباً</h3>
-            <p id="user-role-pc" class="text-xs text-gray-500 dark:text-gray-400"></p>
-          </div>
+      <div class="p-6 border-b dark:border-gray-700 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
+          <i class="fas fa-user"></i>
         </div>
-        
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-2 gap-2 text-center">
-          <div class="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">
-            <div class="text-xs text-gray-600 dark:text-gray-400">المنتجات</div>
-            <div id="quick-total" class="text-lg font-bold text-blue-600 counter">0</div>
-          </div>
-          <div class="bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">
-            <div class="text-xs text-gray-600 dark:text-gray-400">نواقص</div>
-            <div id="quick-low" class="text-lg font-bold text-red-600 counter">0</div>
-          </div>
+        <div>
+          <h3 id="user-greeting-pc" class="font-bold text-gray-800 dark:text-white">مرحباً</h3>
+          <p id="user-role-pc" class="text-xs text-gray-500 dark:text-gray-400"></p>
         </div>
       </div>
 
-      <!-- Navigation -->
       <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-        <button onclick="switchTab('chat')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-blue-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium group">
-          <i class="fas fa-comments text-blue-500 text-xl w-6 group-hover:scale-110 transition"></i> 
-          <span>المحادثة الذكية</span>
+        <button onclick="switchTab('chat')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-blue-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium">
+          <i class="fas fa-comments text-blue-500 text-xl w-6"></i> المحادثة الذكية
         </button>
-        <button onclick="switchTab('inventory')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-green-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium group">
-          <i class="fas fa-boxes text-green-500 text-xl w-6 group-hover:scale-110 transition"></i> 
-          <span>إدارة المخزون</span>
+        <button onclick="switchTab('inventory')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-green-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium">
+          <i class="fas fa-boxes text-green-500 text-xl w-6"></i> إدارة المخزون
         </button>
-        <button onclick="switchTab('stats')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium group">
-          <i class="fas fa-chart-pie text-purple-500 text-xl w-6 group-hover:scale-110 transition"></i> 
-          <span>الإحصائيات</span>
-        </button>
-        <button onclick="switchTab('history')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-yellow-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium group">
-          <i class="fas fa-history text-yellow-500 text-xl w-6 group-hover:scale-110 transition"></i> 
-          <span>سجل الحركات</span>
-        </button>
-        <button onclick="switchTab('reports')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium group">
-          <i class="fas fa-file-alt text-indigo-500 text-xl w-6 group-hover:scale-110 transition"></i> 
-          <span>التقارير</span>
+        <button onclick="switchTab('stats')" class="nav-btn w-full text-right p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-gray-600 dark:text-gray-300 font-medium">
+          <i class="fas fa-chart-pie text-purple-500 text-xl w-6"></i> الإحصائيات
         </button>
       </nav>
 
-      <!-- Footer Actions -->
       <div class="p-4 border-t dark:border-gray-700 space-y-2">
-        <button onclick="openSettings()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition group">
-          <span>الإعدادات</span>
-          <i class="fas fa-sliders text-primary group-hover:rotate-90 transition"></i>
+        <button onclick="openSettings()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+          <span>الإعدادات</span><i class="fas fa-sliders text-primary"></i>
         </button>
-        <button onclick="toggleTheme()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          <span>الوضع الليلي</span>
-          <i class="fas fa-moon text-yellow-500"></i>
+        <button onclick="toggleTheme()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+          <span>الوضع الليلي</span><i class="fas fa-moon text-yellow-500"></i>
         </button>
-        <button onclick="backupData()" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          <span>نسخ احتياطي</span>
-          <i class="fas fa-download text-green-500"></i>
-        </button>
-        <button onclick="logout()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 py-3 rounded-xl font-bold transition shadow-md">
+        <button onclick="logout()" class="w-full bg-red-100 text-red-600 hover:bg-red-200 py-3 rounded-xl font-bold transition">
           <i class="fas fa-sign-out-alt ml-2"></i> خروج
         </button>
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="flex-1 flex flex-col h-full relative w-full bg-gray-100 dark:bg-gray-900">
 
-      <!-- Mobile Header -->
+      <!-- Header (Mobile) -->
       <header class="lg:hidden bg-white dark:bg-gray-800 p-4 shadow-md flex justify-between items-center z-10 h-16 shrink-0">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-sm">
+          <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm">
             <i class="fas fa-user"></i>
           </div>
           <span id="user-greeting-mobile" class="font-bold text-sm">مرحباً</span>
         </div>
         <div class="flex gap-3">
-          <button onclick="openNotifications()" class="relative w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-            <i class="fas fa-bell text-primary"></i>
-            <span id="notif-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">0</span>
-          </button>
           <button onclick="openSettings()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
             <i class="fas fa-sliders text-primary"></i>
           </button>
@@ -289,7 +149,7 @@
 
       <div class="flex-1 overflow-hidden relative w-full">
 
-        <!-- Chat Tab -->
+        <!-- Chat -->
         <section id="tab-chat" class="h-full flex flex-col w-full">
           <div class="px-4 pt-4 pb-2">
             <div class="flex flex-wrap gap-2 items-center">
@@ -309,21 +169,22 @@
 
           <div class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 p-3 lg:p-4 shadow-lg z-20 shrink-0">
             <div class="flex justify-center gap-2 mb-3 text-xs overflow-x-auto pb-1">
-              <button onclick="clearChat()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-red-100 text-gray-600 dark:text-gray-300 transition">
+              <button onclick="clearChat()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-red-100 text-gray-600 dark:text-gray-300">
                 <i class="fas fa-trash"></i> مسح
               </button>
-              <button onclick="exportChatPDF()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-blue-100 text-gray-600 dark:text-gray-300 transition">
+              <button onclick="exportChatPDF()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-blue-100 text-gray-600 dark:text-gray-300">
                 <i class="fas fa-file-pdf"></i> PDF
               </button>
-              <button onclick="shareWhatsApp()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-green-100 text-gray-600 dark:text-gray-300 transition">
+              <button onclick="shareWhatsApp()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-green-100 text-gray-600 dark:text-gray-300">
                 <i class="fab fa-whatsapp"></i> واتساب
               </button>
-              <button onclick="exportChatText()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-purple-100 text-gray-600 dark:text-gray-300 transition">
-                <i class="fas fa-file-alt"></i> نص
+              <button onclick="openSettings()" class="flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-purple-100 text-gray-600 dark:text-gray-300">
+                <i class="fas fa-sliders"></i> إعدادات
               </button>
             </div>
 
             <div class="flex items-center gap-2 max-w-3xl mx-auto">
+              <!-- Fixed mic: toggle click -->
               <button id="mic-btn" onclick="toggleListening()"
                 class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-white flex items-center justify-center hover:bg-gray-300 transition shadow-sm active:scale-90"
                 title="تشغيل/إيقاف الميكروفون">
@@ -335,440 +196,196 @@
                 class="flex-1 h-12 px-4 rounded-full bg-gray-100 dark:bg-gray-900 border-none focus:ring-2 focus:ring-primary outline-none transition"
                 onkeypress="handleEnter(event)" />
 
-              <button onclick="processInput()" class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center hover:from-blue-700 hover:to-indigo-700 transition shadow-md active:scale-90">
+              <button onclick="processInput()" class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-blue-600 transition shadow-md active:scale-90">
                 <i class="fas fa-paper-plane text-lg"></i>
               </button>
             </div>
 
-            <div class="max-w-3xl mx-auto mt-2 text-xs text-gray-500 dark:text-gray-400 leading-5 text-center">
-              <b>أوامر سريعة:</b> جرد • نواقص • بحث: طاولة وسط • كم tv500 • اعرض w334
+            <div class="max-w-3xl mx-auto mt-2 text-xs text-gray-500 dark:text-gray-400 leading-5">
+              أوامر: <b>جرد</b> — <b>نواقص</b> — <b>بحث: طاولة وسط</b> — <b>كم tv500</b> — <b>اعرض w334</b>
             </div>
           </div>
         </section>
 
-        <!-- Inventory Tab -->
+        <!-- Inventory -->
         <section id="tab-inventory" class="h-full flex flex-col hidden p-4 overflow-y-auto pb-24 lg:pb-4">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sticky top-0 bg-gray-100 dark:bg-gray-900 z-10 py-2">
-            <h2 class="text-2xl font-black flex items-center gap-2">
-              <i class="fas fa-boxes text-primary"></i>
-              <span>المخزون</span>
-            </h2>
-            <div class="flex gap-2 flex-wrap">
-              <button onclick="exportExcel()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2 transition">
+          <div class="flex justify-between items-center mb-4 sticky top-0 bg-gray-100 dark:bg-gray-900 z-10 py-2">
+            <h2 class="text-xl font-bold">📦 المخزون</h2>
+            <div class="flex gap-2">
+              <button onclick="exportExcel()" class="bg-green-600 text-white w-10 h-10 rounded-lg shadow flex items-center justify-center">
                 <i class="fas fa-file-excel"></i>
-                <span class="hidden sm:inline">Excel</span>
               </button>
-              <button onclick="printInventory()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2 transition">
-                <i class="fas fa-print"></i>
-                <span class="hidden sm:inline">طباعة</span>
-              </button>
-              <button id="btn-add-modal" onclick="openAddModal()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2 transition">
+              <button id="btn-add-modal" onclick="openAddModal()" class="bg-blue-600 text-white w-10 h-10 rounded-lg shadow flex items-center justify-center">
                 <i class="fas fa-plus"></i>
-                <span class="hidden sm:inline">إضافة</span>
               </button>
             </div>
           </div>
 
-          <!-- Search & Filters -->
-          <div class="mb-4 space-y-3">
-            <div class="relative">
-              <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
-              <input type="text" id="inventory-search" onkeyup="renderInventory()"
-                placeholder="بحث: موديل/نوع/كلمة (مثال: w334 أو تلفزيون)"
-                class="w-full p-3 pr-10 rounded-xl border-none shadow-sm dark:bg-gray-800 focus:ring-2 focus:ring-primary transition" />
-            </div>
-
-            <div class="flex gap-2 overflow-x-auto pb-2">
-              <button onclick="filterByType('all')" class="filter-btn px-4 py-2 rounded-lg bg-primary text-white text-sm whitespace-nowrap transition">
-                الكل
-              </button>
-              <button onclick="filterByType('طاولة وسط')" class="filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm whitespace-nowrap transition">
-                طاولة وسط
-              </button>
-              <button onclick="filterByType('طاولة تلفزيون')" class="filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm whitespace-nowrap transition">
-                طاولة تلفزيون
-              </button>
-              <button onclick="filterByType('درسوار')" class="filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm whitespace-nowrap transition">
-                درسوار
-              </button>
-              <button onclick="filterByType('low')" class="filter-btn px-4 py-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 text-sm whitespace-nowrap transition">
-                <i class="fas fa-exclamation-triangle"></i> نواقص
-              </button>
-            </div>
+          <div class="relative mb-4">
+            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+            <input type="text" id="inventory-search" onkeyup="renderInventory()"
+              placeholder="بحث: موديل/نوع/كلمة (مثال: w334 أو تلفزيون)"
+              class="w-full p-3 pr-10 rounded-xl border-none shadow-sm dark:bg-gray-800" />
           </div>
 
-          <div id="inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+          <div id="inventory-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
         </section>
 
-        <!-- Stats Tab -->
+        <!-- Stats -->
         <section id="tab-stats" class="h-full flex flex-col hidden p-4 overflow-y-auto pb-24 lg:pb-4">
-          <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-            <i class="fas fa-chart-pie text-purple-500"></i>
-            <span>الإحصائيات والتحليلات</span>
-          </h2>
-
-          <!-- Summary Cards -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-2xl shadow-lg">
-              <div class="text-sm opacity-90 mb-1">إجمالي المنتجات</div>
-              <div id="stat-total" class="text-3xl font-black counter">0</div>
-              <i class="fas fa-boxes text-4xl opacity-20 absolute bottom-2 left-2"></i>
-            </div>
-
-            <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-2xl shadow-lg">
-              <div class="text-sm opacity-90 mb-1">إجمالي الكمية</div>
-              <div id="stat-quantity" class="text-3xl font-black counter">0</div>
-              <i class="fas fa-cubes text-4xl opacity-20 absolute bottom-2 left-2"></i>
-            </div>
-
-            <div class="bg-gradient-to-br from-red-500 to-red-600 text-white p-4 rounded-2xl shadow-lg">
-              <div class="text-sm opacity-90 mb-1">نواقص</div>
-              <div id="stat-low" class="text-3xl font-black counter">0</div>
-              <i class="fas fa-exclamation-triangle text-4xl opacity-20 absolute bottom-2 left-2"></i>
-            </div>
-
-            <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-2xl shadow-lg">
-              <div class="text-sm opacity-90 mb-1">الأنواع</div>
-              <div id="stat-types" class="text-3xl font-black counter">0</div>
-              <i class="fas fa-layer-group text-4xl opacity-20 absolute bottom-2 left-2"></i>
-            </div>
-          </div>
-
-          <!-- Charts -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <h3 class="font-bold mb-4 text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                <i class="fas fa-chart-pie text-purple-500"></i>
-                توزيع الأصناف
-              </h3>
+          <h2 class="text-xl font-bold mb-4">📊 تقارير</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm">
+              <h3 class="font-bold mb-2 text-sm text-gray-500">توزيع الأصناف</h3>
               <div class="h-64 flex justify-center"><canvas id="typeChart"></canvas></div>
             </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <h3 class="font-bold mb-4 text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                <i class="fas fa-chart-bar text-blue-500"></i>
-                الكميات حسب النوع
-              </h3>
-              <div class="h-64 flex justify-center"><canvas id="quantityChart"></canvas></div>
-            </div>
-          </div>
-
-          <!-- Alerts -->
-          <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-            <h3 class="font-bold mb-4 text-gray-700 dark:text-gray-300 flex items-center gap-2">
-              <i class="fas fa-bell text-red-500"></i>
-              تنبيهات النواقص
-            </h3>
-            <div id="stock-alerts" class="space-y-2 max-h-64 overflow-y-auto"></div>
-          </div>
-        </section>
-
-        <!-- History Tab (NEW) -->
-        <section id="tab-history" class="h-full flex-col hidden p-4 overflow-y-auto pb-24 lg:pb-4">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-black flex items-center gap-2">
-              <i class="fas fa-history text-yellow-500"></i>
-              <span>سجل الحركات</span>
-            </h2>
-            <button onclick="clearHistory()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow transition">
-              <i class="fas fa-trash"></i> مسح السجل
-            </button>
-          </div>
-
-          <div id="history-list" class="space-y-3"></div>
-        </section>
-
-        <!-- Reports Tab (NEW) -->
-        <section id="tab-reports" class="h-full flex-col hidden p-4 overflow-y-auto pb-24 lg:pb-4">
-          <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-            <i class="fas fa-file-alt text-indigo-500"></i>
-            <span>التقارير المتقدمة</span>
-          </h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Report Cards -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm card-hover cursor-pointer" onclick="generateFullReport()">
-              <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
-                <i class="fas fa-file-pdf text-2xl text-blue-600"></i>
-              </div>
-              <h3 class="font-bold mb-2">تقرير شامل</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">تقرير PDF كامل بجميع المنتجات والإحصائيات</p>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm card-hover cursor-pointer" onclick="generateLowStockReport()">
-              <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-4">
-                <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
-              </div>
-              <h3 class="font-bold mb-2">تقرير النواقص</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">قائمة بالمنتجات التي تحتاج إعادة طلب</p>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm card-hover cursor-pointer" onclick="generateValueReport()">
-              <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
-                <i class="fas fa-dollar-sign text-2xl text-green-600"></i>
-              </div>
-              <h3 class="font-bold mb-2">تقرير القيمة</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">تحليل قيمة المخزون (قريباً)</p>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm card-hover cursor-pointer" onclick="generateBarcodeSheet()">
-              <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
-                <i class="fas fa-barcode text-2xl text-purple-600"></i>
-              </div>
-              <h3 class="font-bold mb-2">طباعة باركود</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">ورقة باركود لجميع المنتجات</p>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm card-hover cursor-pointer" onclick="exportAllData()">
-              <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-4">
-                <i class="fas fa-database text-2xl text-yellow-600"></i>
-              </div>
-              <h3 class="font-bold mb-2">تصدير البيانات</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">تصدير كامل قاعدة البيانات</p>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm card-hover cursor-pointer" onclick="importData()">
-              <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-4">
-                <i class="fas fa-upload text-2xl text-indigo-600"></i>
-              </div>
-              <h3 class="font-bold mb-2">استيراد البيانات</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">استيراد من ملف Excel</p>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm">
+              <h3 class="font-bold mb-2 text-sm text-gray-500">تنبيهات النواقص</h3>
+              <div id="stock-alerts" class="space-y-2 max-h-64 overflow-y-auto"></div>
             </div>
           </div>
         </section>
-
       </div>
 
-      <!-- Bottom Navigation (Mobile) -->
+      <!-- Bottom nav -->
       <nav class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex justify-around items-center h-16 shrink-0 z-30 pb-safe">
-        <button onclick="switchTab('chat')" class="nav-item active flex flex-col items-center justify-center w-full h-full text-primary transition">
-          <i class="fas fa-comments text-xl mb-1"></i>
-          <span class="text-xs font-medium">محادثة</span>
+        <button onclick="switchTab('chat')" class="nav-item active flex flex-col items-center justify-center w-full h-full text-primary">
+          <i class="fas fa-comments text-xl mb-1"></i><span class="text-xs font-medium">محادثة</span>
         </button>
-        <button onclick="switchTab('inventory')" class="nav-item flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-          <i class="fas fa-boxes text-xl mb-1"></i>
-          <span class="text-xs font-medium">مخزون</span>
+        <button onclick="switchTab('inventory')" class="nav-item flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i class="fas fa-boxes text-xl mb-1"></i><span class="text-xs font-medium">مخزون</span>
         </button>
-        <button onclick="switchTab('stats')" class="nav-item flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-          <i class="fas fa-chart-pie text-xl mb-1"></i>
-          <span class="text-xs font-medium">إحصاء</span>
-        </button>
-        <button onclick="switchTab('history')" class="nav-item flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-          <i class="fas fa-history text-xl mb-1"></i>
-          <span class="text-xs font-medium">سجل</span>
-        </button>
-        <button onclick="switchTab('reports')" class="nav-item flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-          <i class="fas fa-file-alt text-xl mb-1"></i>
-          <span class="text-xs font-medium">تقارير</span>
+        <button onclick="switchTab('stats')" class="nav-item flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i class="fas fa-chart-pie text-xl mb-1"></i><span class="text-xs font-medium">إحصاء</span>
         </button>
       </nav>
     </main>
   </div>
 
-  <!-- Modal: Add/Edit Product -->
+  <!-- Modal: Add/Edit -->
   <div id="modal-form" class="fixed inset-0 z-[200] hidden flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-2xl animate-bounce-soft">
-      <h3 class="text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
-        <i class="fas fa-box text-primary"></i>
-        <span>إدارة منتج</span>
-      </h3>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
+      <h3 class="text-xl font-bold mb-4 text-center">إدارة منتج</h3>
 
       <div class="space-y-3">
-        <div>
-          <label class="block text-sm font-medium mb-1">رقم الموديل</label>
-          <input type="text" id="m-model" placeholder="مثال: w334"
-            class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none focus:ring-2 focus:ring-primary transition" />
-        </div>
+        <input type="text" id="m-model" placeholder="رقم الموديل (مثال w334)"
+          class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none" />
+        <select id="m-type" class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none">
+          <option value="طاولة وسط">طاولة وسط</option>
+          <option value="طاولة تلفزيون">طاولة تلفزيون</option>
+          <option value="درسوار">درسوار</option>
+        </select>
+        <input type="number" id="m-count" placeholder="العدد"
+          class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none" />
 
-        <div>
-          <label class="block text-sm font-medium mb-1">النوع</label>
-          <select id="m-type" class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none focus:ring-2 focus:ring-primary transition">
-            <option value="طاولة وسط">طاولة وسط</option>
-            <option value="طاولة تلفزيون">طاولة تلفزيون</option>
-            <option value="درسوار">درسوار</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">الكمية</label>
-          <input type="number" id="m-count" placeholder="العدد"
-            class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-none outline-none focus:ring-2 focus:ring-primary transition" />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">الصورة</label>
-          <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition relative">
-            <input type="file" id="m-img" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage()" />
-            <div id="img-preview">
-              <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-              <p class="text-xs text-gray-500">اضغط لرفع صورة</p>
-            </div>
-          </div>
+        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition relative">
+          <input type="file" id="m-img" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+          <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+          <p class="text-xs text-gray-500">اضغط لرفع صورة</p>
         </div>
       </div>
 
       <div class="flex gap-3 mt-6">
-        <button onclick="closeModal()" class="flex-1 py-3 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-200 transition">
-          إلغاء
-        </button>
-        <button onclick="saveItem()" class="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:from-blue-700 hover:to-indigo-700 transition">
-          <i class="fas fa-save ml-1"></i> حفظ
-        </button>
+        <button onclick="closeModal()" class="flex-1 py-3 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl font-bold">إلغاء</button>
+        <button onclick="saveItem()" class="flex-1 py-3 bg-primary text-white rounded-xl font-bold shadow-lg">حفظ</button>
       </div>
     </div>
   </div>
 
   <!-- Modal: Settings -->
-  <div id="modal-settings" class="fixed inset-0 z-[250] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-2xl shadow-2xl my-8">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-2xl font-black flex items-center gap-2">
-          <i class="fas fa-sliders text-primary"></i>
-          <span>الإعدادات</span>
-        </h3>
-        <button onclick="closeSettings()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 transition">
+  <div id="modal-settings" class="fixed inset-0 z-[250] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">⚙️ الإعدادات</h3>
+        <button onclick="closeSettings()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
           <i class="fas fa-times"></i>
         </button>
       </div>
 
       <div class="space-y-4">
-        <!-- TTS Settings -->
-        <div class="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900/40 dark:to-gray-800/40 border border-blue-100 dark:border-gray-700">
-          <div class="flex items-center justify-between mb-4">
+        <div class="p-4 rounded-xl bg-gray-50 dark:bg-gray-900/40">
+          <div class="flex items-center justify-between">
             <div>
-              <div class="font-bold text-lg flex items-center gap-2">
-                <i class="fas fa-volume-up text-blue-600"></i>
-                <span>صوت المساعد</span>
-              </div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">تحكم بالنبرة والسرعة والصوت الافتراضي</div>
+              <div class="font-bold">🔊 صوت المساعد</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">تحكم بالنبرة والسرعة والصوت الافتراضي.</div>
             </div>
             <label class="inline-flex items-center cursor-pointer">
               <input id="set-tts-enabled" type="checkbox" class="sr-only peer" onchange="saveSettingsFromUI()">
-              <div class="relative w-14 h-7 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-600 transition">
-                <div class="absolute top-0.5 right-0.5 bg-white w-6 h-6 rounded-full transition-all peer-checked:translate-x-[-28px] shadow"></div>
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-primary relative">
+                <div class="absolute top-[2px] right-[2px] bg-white w-5 h-5 rounded-full transition-all peer-checked:translate-x-[-20px]"></div>
               </div>
             </label>
           </div>
 
-          <div class="space-y-4">
+          <div class="mt-4 space-y-3">
             <div>
-              <div class="flex justify-between text-sm mb-2">
-                <span>السرعة</span>
-                <span id="val-rate" class="font-bold text-blue-600">1.00</span>
-              </div>
-              <input id="set-rate" type="range" min="0.75" max="1.35" step="0.05" 
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+              <div class="flex justify-between text-sm"><span>السرعة</span><span id="val-rate" class="font-bold">1.00</span></div>
+              <input id="set-rate" type="range" min="0.75" max="1.35" step="0.05" class="w-full"
                 oninput="previewSettingValue('rate')" onchange="saveSettingsFromUI()">
             </div>
 
             <div>
-              <div class="flex justify-between text-sm mb-2">
-                <span>النبرة</span>
-                <span id="val-pitch" class="font-bold text-blue-600">1.00</span>
-              </div>
-              <input id="set-pitch" type="range" min="0.8" max="1.35" step="0.05" 
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+              <div class="flex justify-between text-sm"><span>النبرة</span><span id="val-pitch" class="font-bold">1.00</span></div>
+              <input id="set-pitch" type="range" min="0.8" max="1.35" step="0.05" class="w-full"
                 oninput="previewSettingValue('pitch')" onchange="saveSettingsFromUI()">
             </div>
 
             <div>
-              <div class="flex justify-between text-sm mb-2">
-                <span>علو الصوت</span>
-                <span id="val-volume" class="font-bold text-blue-600">1.00</span>
-              </div>
-              <input id="set-volume" type="range" min="0" max="1" step="0.05" 
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+              <div class="flex justify-between text-sm"><span>علو الصوت</span><span id="val-volume" class="font-bold">1.00</span></div>
+              <input id="set-volume" type="range" min="0" max="1" step="0.05" class="w-full"
                 oninput="previewSettingValue('volume')" onchange="saveSettingsFromUI()">
             </div>
 
             <div>
-              <div class="text-sm mb-2 font-medium">اختيار الصوت</div>
-              <select id="set-voice" 
-                class="w-full p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 outline-none transition"
+              <div class="text-sm mb-1">اختيار الصوت</div>
+              <select id="set-voice" class="w-full p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600"
                 onchange="saveSettingsFromUI()">
                 <option value="">تحميل الأصوات...</option>
               </select>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">إذا ما فيه صوت عربي، نخلي الافتراضي.</div>
             </div>
 
             <div class="flex gap-2">
-              <button onclick="testVoice()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition shadow">
-                <i class="fas fa-play ml-1"></i> اختبار
-              </button>
-              <button onclick="resetVoiceSettings()" class="flex-1 py-3 rounded-xl bg-gray-200 dark:bg-gray-700 font-bold hover:bg-gray-300 transition">
-                <i class="fas fa-undo ml-1"></i> إعادة ضبط
-              </button>
+              <button onclick="testVoice()" class="flex-1 py-3 rounded-xl bg-secondary text-white font-bold">اختبار</button>
+              <button onclick="resetVoiceSettings()" class="flex-1 py-3 rounded-xl bg-gray-200 dark:bg-gray-700 font-bold">إعادة ضبط</button>
             </div>
           </div>
         </div>
 
-        <!-- STT Settings -->
-        <div class="p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-900/40 dark:to-gray-800/40 border border-green-100 dark:border-gray-700">
-          <div class="font-bold text-lg mb-3 flex items-center gap-2">
-            <i class="fas fa-microphone text-green-600"></i>
-            <span>الميكروفون</span>
-          </div>
-          <div class="text-xs text-gray-500 dark:text-gray-400 mb-4">اضغط زر الميكروفون لتشغيل/إيقاف. يتطلب HTTPS أو localhost</div>
+        <div class="p-4 rounded-xl bg-gray-50 dark:bg-gray-900/40">
+          <div class="font-bold">🎙️ الميكروفون</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">اضغط زر الميكروفون لتشغيل/إيقاف. لازم HTTPS.</div>
 
-          <div class="space-y-3">
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600">
-              <span class="text-sm font-medium">لغة التعرف</span>
-              <select id="set-stt-lang" class="bg-transparent outline-none font-medium" onchange="saveSettingsFromUI()">
+          <div class="mt-3 space-y-2">
+            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+              <span class="text-sm">لغة التعرف</span>
+              <select id="set-stt-lang" class="bg-transparent outline-none" onchange="saveSettingsFromUI()">
                 <option value="ar-SA">ar-SA (سعودي)</option>
                 <option value="ar">ar (عام)</option>
                 <option value="ar-EG">ar-EG (مصري)</option>
               </select>
             </label>
 
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-              <span class="text-sm font-medium">إظهار اقتراحات عند عدم الفهم</span>
-              <input id="set-suggestions" type="checkbox" class="w-5 h-5 accent-green-600 cursor-pointer" onchange="saveSettingsFromUI()">
+            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+              <span class="text-sm">إظهار اقتراحات عند عدم الفهم</span>
+              <input id="set-suggestions" type="checkbox" onchange="saveSettingsFromUI()">
             </label>
 
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-              <span class="text-sm font-medium">تطبيع عربي (أ/إ/آ…)</span>
-              <input id="set-normalize" type="checkbox" class="w-5 h-5 accent-green-600 cursor-pointer" onchange="saveSettingsFromUI()">
+            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+              <span class="text-sm">تطبيع عربي (أ/إ/آ…)</span>
+              <input id="set-normalize" type="checkbox" onchange="saveSettingsFromUI()">
             </label>
           </div>
         </div>
 
-        <!-- Notification Settings -->
-        <div class="p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-900/40 dark:to-gray-800/40 border border-yellow-100 dark:border-gray-700">
-          <div class="font-bold text-lg mb-3 flex items-center gap-2">
-            <i class="fas fa-bell text-yellow-600"></i>
-            <span>الإشعارات</span>
-          </div>
-
-          <div class="space-y-3">
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-              <span class="text-sm font-medium">تفعيل إشعارات المتصفح</span>
-              <input id="set-browser-notif" type="checkbox" class="w-5 h-5 accent-yellow-600 cursor-pointer" onchange="saveSettingsFromUI(); requestNotificationPermission()">
-            </label>
-
-            <label class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-              <span class="text-sm font-medium">تنبيه عند النواقص</span>
-              <input id="set-low-stock-alert" type="checkbox" class="w-5 h-5 accent-yellow-600 cursor-pointer" onchange="saveSettingsFromUI()">
-            </label>
-
-            <div class="p-3 rounded-xl bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600">
-              <div class="text-sm font-medium mb-2">حد التنبيه للنواقص</div>
-              <input id="set-low-threshold" type="number" min="1" max="50" value="5" 
-                class="w-full p-2 rounded-lg bg-gray-50 dark:bg-gray-600 border-none outline-none"
-                onchange="saveSettingsFromUI()">
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- Print Area (Hidden) -->
-  <div id="print-area" class="hidden"></div>
-
 <script>
-/* ========================================
-   CORE SYSTEM - Enhanced Version 9.0
-======================================== */
-
+/* =========================
+   0) Helpers UI
+========================= */
 function $(id){ return document.getElementById(id); }
 function escapeHtml(s){
   return (s ?? "").toString()
@@ -776,9 +393,9 @@ function escapeHtml(s){
     .replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
-/* ========================================
-   USER MANAGEMENT
-======================================== */
+/* =========================
+   1) Users + state
+========================= */
 const USERS = {
   1: { name: "حسن", role: "admin", pass: "123", label: "مسؤول" },
   2: { name: "معتز", role: "viewer", pass: "123", label: "مشاهد" },
@@ -789,25 +406,25 @@ let db;
 let recognition = null;
 let isListening = false;
 let chartInstance = null;
-let quantityChartInstance = null;
-let currentFilter = 'all';
 
-/* ========================================
-   SETTINGS MANAGEMENT
-======================================== */
-const SETTINGS_KEY = "WarehouseV9Settings";
+/* =========================
+   2) Settings (saved)
+========================= */
+const SETTINGS_KEY = "WarehouseV8Settings";
 const defaultSettings = {
+  // TTS
   ttsEnabled: true,
   rate: 1.0,
   pitch: 1.0,
   volume: 1.0,
   voiceURI: "",
+
+  // STT
   sttLang: "ar-SA",
+
+  // Smart behavior
   suggestions: true,
   normalizeArabic: true,
-  browserNotif: false,
-  lowStockAlert: true,
-  lowThreshold: 5
 };
 let settings = loadSettings();
 
@@ -818,172 +435,42 @@ function loadSettings(){
     return { ...defaultSettings, ...JSON.parse(raw) };
   }catch{ return { ...defaultSettings }; }
 }
-
 function saveSettings(){
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   updateBadges();
-  checkLowStockAlerts();
 }
 
-/* ========================================
-   TOAST NOTIFICATIONS (NEW)
-======================================== */
-function showToast(message, type = 'info', duration = 3000) {
-  const container = $('toast-container');
-  const toast = document.createElement('div');
-  
-  const colors = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    warning: 'bg-yellow-500',
-    info: 'bg-blue-500'
-  };
-  
-  const icons = {
-    success: 'fa-check-circle',
-    error: 'fa-times-circle',
-    warning: 'fa-exclamation-triangle',
-    info: 'fa-info-circle'
-  };
-  
-  toast.className = `toast ${colors[type]} text-white flex items-center gap-3`;
-  toast.innerHTML = `
-    <i class="fas ${icons[type]} text-xl"></i>
-    <span class="flex-1">${escapeHtml(message)}</span>
-    <button onclick="this.parentElement.remove()" class="hover:bg-white/20 rounded p-1">
-      <i class="fas fa-times"></i>
-    </button>
-  `;
-  
-  container.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.style.animation = 'fadeOut 0.3s ease-out forwards';
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-
-/* ========================================
-   BROWSER NOTIFICATIONS (NEW)
-======================================== */
-function requestNotificationPermission() {
-  if (!('Notification' in window)) {
-    showToast('المتصفح لا يدعم الإشعارات', 'warning');
-    return;
-  }
-  
-  if (Notification.permission === 'granted') {
-    showToast('الإشعارات مفعّلة', 'success');
-  } else if (Notification.permission !== 'denied') {
-    Notification.requestPermission().then(permission => {
-      if (permission === 'granted') {
-        showToast('تم تفعيل الإشعارات', 'success');
-        new Notification('نظام المستودع الذكي', {
-          body: 'الإشعارات مفعّلة الآن!',
-          icon: 'https://via.placeholder.com/128/2563eb/ffffff?text=📦'
-        });
-      }
-    });
-  }
-}
-
-function sendNotification(title, body) {
-  if (!settings.browserNotif) return;
-  if (!('Notification' in window)) return;
-  if (Notification.permission !== 'granted') return;
-  
-  new Notification(title, {
-    body: body,
-    icon: 'https://via.placeholder.com/128/2563eb/ffffff?text=📦',
-    badge: 'https://via.placeholder.com/96/2563eb/ffffff?text=!',
-    vibrate: [200, 100, 200]
-  });
-}
-
-/* ========================================
-   LOW STOCK ALERTS (NEW)
-======================================== */
-async function checkLowStockAlerts() {
-  if (!settings.lowStockAlert) return;
-  
-  const items = await getAll();
-  const threshold = settings.lowThreshold || 5;
-  const lowItems = items.filter(i => (i.count ?? 0) < threshold);
-  
-  if (lowItems.length > 0) {
-    const message = `تنبيه: ${lowItems.length} منتج أقل من ${threshold}`;
-    showToast(message, 'warning', 5000);
-    sendNotification('تنبيه نواقص المخزون', message);
-    
-    // Update notification badge
-    const badge = $('notif-badge');
-    if (badge) {
-      badge.textContent = lowItems.length;
-      badge.classList.remove('hidden');
-    }
-  }
-}
-
-function openNotifications() {
-  switchTab('stats');
-  setTimeout(() => {
-    document.querySelector('#stock-alerts')?.scrollIntoView({ behavior: 'smooth' });
-  }, 300);
-}
-
-/* ========================================
-   ENVIRONMENT WARNING
-======================================== */
+/* =========================
+   3) Environment warning for mic
+========================= */
 (function showEnvWarning(){
   const isSecure = window.isSecureContext;
   const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
   if(!isSecure && !isLocalhost) $("env-warning").classList.remove("hidden");
 })();
 
-/* ========================================
-   INDEXEDDB SETUP
-======================================== */
-const request = indexedDB.open("WarehouseV9", 2);
-
+/* =========================
+   4) IndexedDB
+========================= */
+const request = indexedDB.open("WarehouseV8", 1);
 request.onupgradeneeded = (e) => {
   db = e.target.result;
-  
-  // Inventory store
   if (!db.objectStoreNames.contains('inventory')) {
     const store = db.createObjectStore('inventory', { keyPath: "model" });
-    store.add({ model: "w334", type: "طاولة وسط", count: 15, img: "https://placehold.co/150/2563eb/ffffff?text=W334", addedDate: new Date().toISOString() });
-    store.add({ model: "tv500", type: "طاولة تلفزيون", count: 5, img: "https://placehold.co/150/10b981/ffffff?text=TV500", addedDate: new Date().toISOString() });
-    store.add({ model: "ds110", type: "درسوار", count: 2, img: "https://placehold.co/150/f59e0b/ffffff?text=DS110", addedDate: new Date().toISOString() });
-    store.add({ model: "w120", type: "طاولة وسط", count: 7, img: "https://placehold.co/150/8b5cf6/ffffff?text=W120", addedDate: new Date().toISOString() });
+    store.add({ model: "w334", type: "طاولة وسط", count: 15, img: "https://placehold.co/150/png?text=W334" });
+    store.add({ model: "tv500", type: "طاولة تلفزيون", count: 5, img: "https://placehold.co/150/png?text=TV500" });
+    store.add({ model: "ds110", type: "درسوار", count: 2, img: "https://placehold.co/150/png?text=DS110" });
+    store.add({ model: "w120", type: "طاولة وسط", count: 7, img: "https://placehold.co/150/png?text=W120" });
   }
-  
-  // Chats store
   if (!db.objectStoreNames.contains('chats')) {
     db.createObjectStore('chats', { keyPath: "id", autoIncrement: true });
   }
-  
-  // History store (NEW)
-  if (!db.objectStoreNames.contains('history')) {
-    const historyStore = db.createObjectStore('history', { keyPath: "id", autoIncrement: true });
-    historyStore.createIndex("date", "date", { unique: false });
-    historyStore.createIndex("type", "type", { unique: false });
-  }
 };
+request.onsuccess = (e) => { db = e.target.result; loadChatHistory(); };
 
-request.onsuccess = (e) => { 
-  db = e.target.result; 
-  loadChatHistory();
-  loadHistory();
-};
-
-request.onerror = (e) => {
-  showToast('خطأ في قاعدة البيانات', 'error');
-  console.error('DB Error:', e);
-};
-
-/* ========================================
-   LOGIN & NAVIGATION
-======================================== */
+/* =========================
+   5) Login + navigation
+========================= */
 function login() {
   const id = $("user-select").value;
   const pass = $("password-input").value;
@@ -999,99 +486,43 @@ function login() {
     $("user-role-pc").innerText = currentUser.label;
     $("user-greeting-mobile").innerText = `أستاذ ${currentUser.name}`;
 
-    if (currentUser.role === "viewer") {
-      $("btn-add-modal")?.classList.add("hidden");
-    }
+    if (currentUser.role === "viewer") $("btn-add-modal").classList.add("hidden");
 
     initTTS();
     initSTT();
     renderInventory();
     updateStats();
-    updateQuickStats();
     updateBadges();
-    checkLowStockAlerts();
 
-    showToast(`مرحباً ${currentUser.name}! تم تسجيل الدخول بنجاح`, 'success');
-    
     speak(buildAssistantReply({
       title: `مرحباً أستاذ ${currentUser.name}`,
-      body: `النظام جاهز. يمكنك البحث عن المنتجات أو استخدام الميكروفون.`,
+      body: `جاهز. اكتب موديل أو نوع. ويمكنك تشغيل الميكروفون من الزر.`,
       tips: [`مثال: كم w334`, `مثال: نواقص`, `مثال: طاولة تلفزيون`]
     }));
-    
-    logHistory('login', `تسجيل دخول: ${currentUser.name}`);
   } else {
     $("login-error").classList.remove("hidden");
-    showToast('كلمة المرور غير صحيحة', 'error');
   }
 }
-
-function logout(){ 
-  if (confirm('هل تريد تسجيل الخروج؟')) {
-    logHistory('logout', `تسجيل خروج: ${currentUser?.name || 'مستخدم'}`);
-    showToast('تم تسجيل الخروج', 'info');
-    setTimeout(() => location.reload(), 500);
-  }
-}
+function logout(){ location.reload(); }
 
 function switchTab(tabId) {
-  // Hide all tabs
-  ['chat','inventory','stats','history','reports'].forEach(id => {
-    const tab = $(`tab-${id}`);
-    if (tab) {
-      tab.classList.add('hidden');
-      tab.classList.remove('flex');
-    }
-  });
-  
-  // Show selected tab
+  ['chat','inventory','stats'].forEach(id => $(`tab-${id}`).classList.add('hidden'));
   const active = $(`tab-${tabId}`);
-  if (active) {
-    active.classList.remove('hidden');
-    active.classList.add('flex');
-  }
-  
-  // Update nav buttons
-  document.querySelectorAll('.nav-item, .nav-btn').forEach(btn => {
-    btn.classList.remove('active', 'bg-blue-50', 'dark:bg-gray-700', 'text-primary');
-    btn.classList.add('text-gray-400');
-  });
-  
-  const activeBtn = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
-  if (activeBtn) {
-    activeBtn.classList.add('active', 'text-primary');
-    if (activeBtn.classList.contains('nav-btn')) {
-      activeBtn.classList.add('bg-blue-50', 'dark:bg-gray-700');
-    }
-  }
-  
-  // Special actions per tab
-  if (tabId === 'stats') updateStats();
-  if (tabId === 'history') loadHistory();
-  if (tabId === 'inventory') renderInventory();
-  
-  logHistory('navigation', `الانتقال إلى: ${tabId}`);
+  active.classList.remove('hidden');
+  active.classList.add('flex');
+  if(tabId === 'stats') updateStats();
 }
+function toggleTheme(){ document.documentElement.classList.toggle('dark'); }
 
-function toggleTheme(){ 
-  document.documentElement.classList.toggle('dark');
-  const isDark = document.documentElement.classList.contains('dark');
-  showToast(isDark ? 'تم تفعيل الوضع الليلي' : 'تم تفعيل الوضع النهاري', 'info', 2000);
-  logHistory('theme', `تغيير المظهر: ${isDark ? 'ليلي' : 'نهاري'}`);
-}
-
-/* ========================================
-   SETTINGS MODAL
-======================================== */
+/* =========================
+   6) Settings modal
+========================= */
 function openSettings(){
   $("modal-settings").classList.remove("hidden");
   hydrateSettingsUI();
   refreshVoices(true);
 }
-
-function closeSettings(){ 
-  $("modal-settings").classList.add("hidden"); 
-}
+function closeSettings(){ $("modal-settings").classList.add("hidden"); }
 
 function hydrateSettingsUI(){
   $("set-tts-enabled").checked = !!settings.ttsEnabled;
@@ -1101,21 +532,16 @@ function hydrateSettingsUI(){
   $("set-suggestions").checked = !!settings.suggestions;
   $("set-normalize").checked = !!settings.normalizeArabic;
   $("set-stt-lang").value = settings.sttLang;
-  $("set-browser-notif").checked = !!settings.browserNotif;
-  $("set-low-stock-alert").checked = !!settings.lowStockAlert;
-  $("set-low-threshold").value = settings.lowThreshold || 5;
 
   $("val-rate").innerText = Number(settings.rate).toFixed(2);
   $("val-pitch").innerText = Number(settings.pitch).toFixed(2);
   $("val-volume").innerText = Number(settings.volume).toFixed(2);
 }
-
 function previewSettingValue(which){
   if(which==='rate') $("val-rate").innerText = Number($("set-rate").value).toFixed(2);
   if(which==='pitch') $("val-pitch").innerText = Number($("set-pitch").value).toFixed(2);
   if(which==='volume') $("val-volume").innerText = Number($("set-volume").value).toFixed(2);
 }
-
 function saveSettingsFromUI(){
   settings.ttsEnabled = $("set-tts-enabled").checked;
   settings.rate = parseFloat($("set-rate").value);
@@ -1125,17 +551,11 @@ function saveSettingsFromUI(){
   settings.suggestions = $("set-suggestions").checked;
   settings.normalizeArabic = $("set-normalize").checked;
   settings.sttLang = $("set-stt-lang").value || "ar-SA";
-  settings.browserNotif = $("set-browser-notif").checked;
-  settings.lowStockAlert = $("set-low-stock-alert").checked;
-  settings.lowThreshold = parseInt($("set-low-threshold").value) || 5;
-  
   saveSettings();
 
+  // update STT language live
   if(recognition) recognition.lang = settings.sttLang;
-  
-  showToast('تم حفظ الإعدادات', 'success', 2000);
 }
-
 function resetVoiceSettings(){
   settings.ttsEnabled = true;
   settings.rate = 1.0;
@@ -1146,18 +566,16 @@ function resetVoiceSettings(){
   hydrateSettingsUI();
   refreshVoices(true);
   speak("تمت إعادة ضبط إعدادات الصوت.");
-  showToast('تم إعادة ضبط إعدادات الصوت', 'success');
 }
-
 function updateBadges(){
   $("tts-status").innerHTML = settings.ttsEnabled
     ? `<i class="fas fa-volume-up"></i> الصوت: مفعّل`
     : `<i class="fas fa-volume-mute"></i> الصوت: متوقف`;
 }
 
-/* ========================================
-   TTS (TEXT TO SPEECH)
-======================================== */
+/* =========================
+   7) TTS: better selection + cleaner reading
+========================= */
 const synth = window.speechSynthesis;
 let cachedVoices = [];
 
@@ -1167,7 +585,6 @@ function initTTS(){
   setTimeout(() => refreshVoices(), 200);
   setTimeout(() => refreshVoices(), 1000);
 }
-
 function refreshVoices(force=false){
   if(!('speechSynthesis' in window)) return;
   const voices = synth.getVoices();
@@ -1182,7 +599,6 @@ function refreshVoices(force=false){
 
   const ar = voices.filter(v => (v.lang||'').toLowerCase().startsWith('ar'));
   const other = voices.filter(v => !(v.lang||'').toLowerCase().startsWith('ar'));
-  
   [...ar, ...other].forEach(v => {
     const opt = document.createElement('option');
     opt.value = v.voiceURI;
@@ -1192,12 +608,10 @@ function refreshVoices(force=false){
 
   if(prev) sel.value = prev;
 }
-
 function getSelectedVoice(){
   if(!settings.voiceURI) return null;
   return cachedVoices.find(v => v.voiceURI === settings.voiceURI) || null;
 }
-
 function speak(text){
   if(!('speechSynthesis' in window)) return;
   if(!settings.ttsEnabled) return;
@@ -1213,7 +627,8 @@ function speak(text){
     if(synth.speaking) synth.cancel();
 
     const u = new SpeechSynthesisUtterance(cleaned);
-    u.lang = settings.sttLang || 'ar-SA';
+    u.lang = settings.sttLang || 'ar-SA'; // عادة يعطي نطق أقرب
+
     u.rate = settings.rate;
     u.pitch = settings.pitch;
     u.volume = settings.volume;
@@ -1222,27 +637,24 @@ function speak(text){
     if(v) u.voice = v;
 
     synth.speak(u);
-  }catch(e){
-    console.error('TTS Error:', e);
-  }
+  }catch{}
 }
-
 function testVoice(){
   const name = currentUser?.name || "صديقي";
-  speak(`مرحباً ${name}. هذا اختبار للصوت. النبرة والسرعة مضبوطتان بشكل مثالي.`);
-  showToast('جاري اختبار الصوت...', 'info', 2000);
+  speak(`مرحباً ${name}. هذا اختبار. النبرة والسرعة مضبوطتان.`);
 }
 
-/* ========================================
-   STT (SPEECH TO TEXT)
-======================================== */
+/* =========================
+   8) STT (microphone) FIXED
+   - Toggle start/stop
+   - Better error messages
+========================= */
 function initSTT(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     setSttStatus("غير مدعوم في هذا المتصفح", false);
     return;
   }
-  
   recognition = new SR();
   recognition.lang = settings.sttLang || 'ar-SA';
   recognition.continuous = false;
@@ -1253,19 +665,17 @@ function initSTT(){
     isListening = true;
     $("mic-btn").classList.add("mic-active");
     setSttStatus("يستمع الآن…", true);
-    showToast('الميكروفون مفعّل', 'info', 2000);
   };
-  
   recognition.onend = () => {
     isListening = false;
     $("mic-btn").classList.remove("mic-active");
     setSttStatus("متوقف", false);
   };
-  
   recognition.onerror = (e) => {
     isListening = false;
     $("mic-btn").classList.remove("mic-active");
 
+    // Common errors: not-allowed, service-not-allowed, audio-capture, network, no-speech
     const msg = ({
       "not-allowed": "مرفوض: فعّل صلاحية الميكروفون من المتصفح/النظام.",
       "service-not-allowed": "الخدمة غير مسموحة. جرّب Chrome/Edge أو HTTPS.",
@@ -1276,23 +686,18 @@ function initSTT(){
     })[e.error] || `خطأ ميكروفون: ${e.error}`;
 
     setSttStatus(msg, false);
-    showToast(msg, 'error', 4000);
-    
-    addMsg('ai', buildAssistantReply({ 
-      title: "مشكلة في الميكروفون", 
-      body: msg, 
-      tips: [
-        "تأكد أنك على HTTPS أو localhost",
-        "اسمح للميكروفون من إعدادات الموقع",
-        "جرّب Chrome أو Edge"
-      ]
-    }));
+    addMsg('ai', buildAssistantReply({ title: "مشكلة في الميكروفون", body: msg, tips: [
+      "تأكد أنك على HTTPS أو localhost",
+      "اسمح للميكروفون من إعدادات الموقع",
+      "جرّب Chrome أو Edge"
+    ]}));
   };
 
   recognition.onresult = (event) => {
     const results = event.results?.[0];
     if(!results) return;
 
+    // pick best transcript
     let best = "";
     let bestConf = -1;
     for(let i=0;i<results.length;i++){
@@ -1300,25 +705,21 @@ function initSTT(){
       const c = results[i].confidence ?? 0;
       if(c > bestConf){ bestConf = c; best = t; }
     }
-    
     best = (best || "").trim();
     if(!best) return;
 
     $("chat-input").value = best;
-    showToast(`تم التعرف: ${best}`, 'success', 2000);
     processInput(best);
   };
 
+  // Initial status
   setSttStatus("جاهز", false);
 }
 
 function setSttStatus(text, active){
-  const statusEl = $("stt-status");
-  if (statusEl) {
-    statusEl.innerHTML = active
-      ? `<i class="fas fa-microphone"></i> الميكروفون: ${escapeHtml(text)}`
-      : `<i class="fas fa-microphone-slash"></i> الميكروفون: ${escapeHtml(text)}`;
-  }
+  $("stt-status").innerHTML = active
+    ? `<i class="fas fa-microphone"></i> الميكروفون: ${escapeHtml(text)}`
+    : `<i class="fas fa-microphone-slash"></i> الميكروفون: ${escapeHtml(text)}`;
 }
 
 async function toggleListening(){
@@ -1331,6 +732,7 @@ async function toggleListening(){
     return;
   }
 
+  // Check secure context
   const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
   if(!window.isSecureContext && !isLocalhost){
     addMsg('ai', buildAssistantReply({
@@ -1341,6 +743,7 @@ async function toggleListening(){
     return;
   }
 
+  // Try to pre-request permission (best-effort)
   try{
     if(navigator.mediaDevices?.getUserMedia){
       await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -1354,6 +757,7 @@ async function toggleListening(){
     return;
   }
 
+  // Toggle
   try{
     if(isListening){
       recognition.stop();
@@ -1361,33 +765,34 @@ async function toggleListening(){
       recognition.start();
     }
   }catch(e){
+    // Some browsers throw if start called too quickly
     setSttStatus("حاول مرة أخرى بعد ثانية", false);
-    showToast('حاول مرة أخرى', 'warning', 2000);
   }
 }
 
-/* ========================================
-   SMART UNDERSTANDING
-======================================== */
+/* =========================
+   9) Smart understanding (more accurate)
+   - Arabic normalize
+   - synonyms
+   - fuzzy match (edit distance + token scoring)
+   - intents: all, low, count, show, type
+========================= */
 function normalizeArabicText(s){
   if(!settings.normalizeArabic) return (s||"").toLowerCase().trim();
   return (s||"")
     .toLowerCase()
-    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'')
+    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'') // tashkeel
     .replace(/[إأآا]/g,'ا')
     .replace(/ى/g,'ي')
     .replace(/ؤ/g,'و')
     .replace(/ئ/g,'ي')
     .replace(/ة/g,'ه')
     .replace(/ـ/g,'')
-    .replace(/[^\p{L}\p{N}\s]/gu,' ')
+    .replace(/[^\p{L}\p{N}\s]/gu,' ') // remove punctuation
     .replace(/\s+/g,' ')
     .trim();
 }
-
-function tokens(s){ 
-  return normalizeArabicText(s).split(' ').filter(Boolean); 
-}
+function tokens(s){ return normalizeArabicText(s).split(' ').filter(Boolean); }
 
 const TYPE_SYNONYMS = {
   "طاولة وسط": ["طاولة وسط","طاوله وسط","طاولة","طاوله","وسط","ترابيزه وسط","ترابيزه"],
@@ -1395,6 +800,7 @@ const TYPE_SYNONYMS = {
   "درسوار": ["درسوار","دريسوار","تسريحه","تسريحه مدخل","كونسول","كونسول مدخل","مدخل"]
 };
 
+// Fuzzy helpers
 function levenshtein(a,b){
   a = a || ""; b = b || "";
   const m=a.length,n=b.length;
@@ -1410,7 +816,6 @@ function levenshtein(a,b){
   }
   return dp[m][n];
 }
-
 function similarity(a,b){
   a = normalizeArabicText(a); b = normalizeArabicText(b);
   if(!a || !b) return 0;
@@ -1418,18 +823,17 @@ function similarity(a,b){
   const dist = levenshtein(a,b);
   return 1 - dist / Math.max(a.length,b.length);
 }
-
 function extractModels(raw){
   const m = (raw||"").match(/[a-z]+\d+/gi);
   return m ? m.map(x=>x.toLowerCase()) : [];
 }
-
 function detectTypeFromQuery(qNorm){
+  // returns best matching canonical type or null
   let best = { type: null, score: 0 };
   for(const [type, variants] of Object.entries(TYPE_SYNONYMS)){
     for(const v of variants){
       if(qNorm.includes(normalizeArabicText(v))){
-        return type;
+        return type; // strong hit
       }
       const s = similarity(qNorm, v);
       if(s > best.score){
@@ -1439,7 +843,6 @@ function detectTypeFromQuery(qNorm){
   }
   return best.score >= 0.72 ? best.type : null;
 }
-
 function parseIntent(raw){
   const q = normalizeArabicText(raw);
   const toks = tokens(raw);
@@ -1449,6 +852,7 @@ function parseIntent(raw){
   const isCount = /(كم|عدد|كميه|كمية)/.test(q);
   const isShow = /(اعرض|عرض|هات|جيب|طلّع|طلع|وريني|ارني)/.test(q);
 
+  // threshold "اقل من X"
   let lessThan = null;
   const m = q.match(/اقل من\s*(\d+)/);
   if(m) lessThan = parseInt(m[1],10);
@@ -1460,6 +864,7 @@ function parseIntent(raw){
 }
 
 function buildAssistantReply({title="", body="", tips=[]}){
+  // نص مقروء جيداً: جمل قصيرة + فواصل واضحة
   let out = "";
   if(title) out += `${title}. `;
   if(body) out += `${body} `;
@@ -1479,12 +884,15 @@ function scoreItem(item, intent){
 
   let score = 0;
 
+  // strong: model exact
   if(intent.models.length && intent.models.includes(model)) score += 120;
   if(q.includes(model)) score += 80;
   if(model.startsWith(q) && q.length>=2) score += 50;
 
+  // type hit via synonyms + similarity
   if(intent.type && item.type === intent.type) score += 70;
 
+  // token matches
   const typeNorm = normalizeArabicText(type);
   toks.forEach(t=>{
     if(t.length<2) return;
@@ -1492,6 +900,7 @@ function scoreItem(item, intent){
     if(typeNorm.includes(t)) score += 16;
   });
 
+  // fuzzy similarity for short typos (especially model)
   if(q.length >= 3){
     score += Math.round(similarity(q, model) * 35);
     score += Math.round(similarity(q, type) * 25);
@@ -1500,12 +909,10 @@ function scoreItem(item, intent){
   return score;
 }
 
-/* ========================================
-   CHAT FLOW
-======================================== */
-function handleEnter(e){ 
-  if(e.key === 'Enter') processInput(); 
-}
+/* =========================
+   10) Chat flow
+========================= */
+function handleEnter(e){ if(e.key === 'Enter') processInput(); }
 
 async function processInput(forcedText=null){
   const input = $("chat-input");
@@ -1517,8 +924,6 @@ async function processInput(forcedText=null){
 
   const allItems = await getAll();
   const intent = parseIntent(raw);
-
-  logHistory('chat', `استعلام: ${raw}`);
 
   // Intent: all inventory
   if(intent.isAll){
@@ -1534,7 +939,7 @@ async function processInput(forcedText=null){
 
   // Intent: low stock
   if(intent.isLow || intent.lessThan !== null){
-    const th = intent.lessThan ?? settings.lowThreshold;
+    const th = intent.lessThan ?? 5;
     const data = allItems.filter(i => (i.count ?? 0) < th);
     const reply = data.length
       ? buildAssistantReply({ title: "تنبيه نواقص", body: `وجدت ${data.length} أصناف أقل من ${th}.` })
@@ -1595,8 +1000,9 @@ async function processInput(forcedText=null){
 
   if(ranked.length){
     const data = ranked.slice(0, 12).map(x=>x.item);
+
+    // If user asked count but query was generic, try to answer if top is very confident
     const top = ranked[0];
-    
     let reply = "";
     if(intent.isCount && top.score >= 90){
       reply = buildAssistantReply({
@@ -1634,20 +1040,19 @@ function addMsg(sender, text, data=[]){
   div.className = `flex ${sender==='user' ? 'justify-end' : 'justify-start'} animate-fade-in`;
 
   const safeText = escapeHtml(text).replaceAll("\n","<br>");
-  let html = `<div class="max-w-[85%] p-4 rounded-2xl shadow-md ${sender==='user'
-    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-none'
-    : 'bg-white dark:bg-gray-700 rounded-bl-none'}">
+  let html = `<div class="max-w-[85%] p-3 rounded-2xl ${sender==='user'
+    ? 'bg-primary text-white rounded-br-none'
+    : 'bg-white dark:bg-gray-700 shadow rounded-bl-none'}">
       <p class="text-sm md:text-base leading-6">${safeText}</p>`;
 
   if(data?.length){
-    html += `<div class="mt-3 grid grid-cols-2 gap-2">`;
+    html += `<div class="mt-2 grid grid-cols-2 gap-2">`;
     data.forEach(i=>{
-      const isLow = (i.count ?? 0) < settings.lowThreshold;
-      html += `<div class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg border ${isLow ? 'border-red-300' : 'border-gray-200'} dark:border-gray-500 text-center hover:shadow-lg transition cursor-pointer" onclick="showItemDetails('${i.model}')">
-        <img src="${i.img}" class="w-full h-16 object-cover rounded mb-1" alt="img" onerror="this.src='https://placehold.co/150/cccccc/666666?text=NO+IMG'">
+      html += `<div class="bg-gray-50 dark:bg-gray-600 p-2 rounded border border-gray-100 dark:border-gray-500 text-center">
+        <img src="${i.img}" class="w-full h-16 object-cover rounded mb-1" alt="img">
         <div class="text-xs font-bold text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</div>
         <div class="text-xs text-gray-500 dark:text-gray-300 mb-1">${escapeHtml(i.type||'')}</div>
-        <div class="font-bold ${isLow ? 'text-red-600' : 'text-green-600'}">${escapeHtml(i.count)}</div>
+        <div class="text-green-600 font-bold">${escapeHtml(i.count)}</div>
       </div>`;
     });
     html += `</div>`;
@@ -1671,24 +1076,24 @@ function loadChatHistory(){
     const box = $("chat-box");
     box.innerHTML = "";
     (e.target.result||[]).forEach(msg=>{
+      // render without re-saving
       const div = document.createElement('div');
       div.className = `flex ${msg.sender==='user' ? 'justify-end' : 'justify-start'}`;
       const safeText = escapeHtml(msg.text).replaceAll("\n","<br>");
 
-      let html = `<div class="max-w-[85%] p-4 rounded-2xl shadow-md ${msg.sender==='user'
-        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-none'
-        : 'bg-white dark:bg-gray-700 rounded-bl-none'}">
+      let html = `<div class="max-w-[85%] p-3 rounded-2xl ${msg.sender==='user'
+        ? 'bg-primary text-white rounded-br-none'
+        : 'bg-white dark:bg-gray-700 shadow rounded-bl-none'}">
         <p class="text-sm md:text-base leading-6">${safeText}</p>`;
 
       if(msg.data?.length){
-        html += `<div class="mt-3 grid grid-cols-2 gap-2">`;
+        html += `<div class="mt-2 grid grid-cols-2 gap-2">`;
         msg.data.forEach(i=>{
-          const isLow = (i.count ?? 0) < settings.lowThreshold;
-          html += `<div class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg border ${isLow ? 'border-red-300' : 'border-gray-200'} dark:border-gray-500 text-center">
-            <img src="${i.img}" class="w-full h-16 object-cover rounded mb-1" alt="img" onerror="this.src='https://placehold.co/150/cccccc/666666?text=NO+IMG'">
+          html += `<div class="bg-gray-50 dark:bg-gray-600 p-2 rounded border border-gray-100 dark:border-gray-500 text-center">
+            <img src="${i.img}" class="w-full h-16 object-cover rounded mb-1" alt="img">
             <div class="text-xs font-bold text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</div>
             <div class="text-xs text-gray-500 dark:text-gray-300 mb-1">${escapeHtml(i.type||'')}</div>
-            <div class="font-bold ${isLow ? 'text-red-600' : 'text-green-600'}">${escapeHtml(i.count)}</div>
+            <div class="text-green-600 font-bold">${escapeHtml(i.count)}</div>
           </div>`;
         });
         html += `</div>`;
@@ -1703,197 +1108,58 @@ function loadChatHistory(){
 }
 
 function clearChat(){
-  if(!confirm('هل تريد مسح جميع المحادثات؟')) return;
   if(!db) return;
   const tx = db.transaction("chats","readwrite");
   tx.objectStore("chats").clear();
   $("chat-box").innerHTML = "";
-  showToast('تم مسح المحادثات', 'success');
-  logHistory('chat', 'مسح المحادثات');
 }
 
-function exportChatText(){
-  if(!db) return;
-  const tx = db.transaction("chats","readonly");
-  tx.objectStore("chats").getAll().onsuccess = (e)=>{
-    let text = "=== محادثات نظام المستودع الذكي ===\n\n";
-    (e.target.result||[]).forEach(msg=>{
-      text += `[${msg.sender === 'user' ? 'أنت' : 'المساعد'}]: ${msg.text}\n`;
-      if(msg.data?.length){
-        text += `المنتجات: ${msg.data.map(i=>`${i.model} (${i.count})`).join(', ')}\n`;
-      }
-      text += '\n';
-    });
-    
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chat-${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    showToast('تم تصدير المحادثات', 'success');
-    logHistory('export', 'تصدير المحادثات (نص)');
-  };
-}
-
-/* ========================================
-   INVENTORY MANAGEMENT
-======================================== */
+/* =========================
+   11) Inventory
+========================= */
 async function getAll(){
   return new Promise(res=>{
     if(!db) return res([]);
     db.transaction("inventory","readonly").objectStore("inventory").getAll().onsuccess = e => res(e.target.result || []);
   });
 }
-
 async function renderInventory(){
   const items = await getAll();
-  const q = normalizeArabicText($("inventory-search")?.value || "");
+  const q = normalizeArabicText($("inventory-search").value || "");
   const grid = $("inventory-grid");
-  if (!grid) return;
-  
   grid.innerHTML = "";
 
-  let filtered = items;
-  
-  // Apply type filter
-  if (currentFilter !== 'all') {
-    if (currentFilter === 'low') {
-      filtered = items.filter(i => (i.count ?? 0) < settings.lowThreshold);
-    } else {
-      filtered = items.filter(i => i.type === currentFilter);
-    }
-  }
-  
-  // Apply search filter
-  if (q) {
-    filtered = filtered.filter(i=>{
-      const model = (i.model||"").toLowerCase();
-      const type = normalizeArabicText(i.type||"");
-      return model.includes(q) || type.includes(q) || similarity(q, model) >= 0.72 || similarity(q, type) >= 0.72;
-    });
-  }
-
-  if (filtered.length === 0) {
-    grid.innerHTML = `
-      <div class="col-span-full text-center py-12">
-        <i class="fas fa-inbox text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-        <p class="text-gray-500 dark:text-gray-400">لا توجد منتجات</p>
-      </div>
-    `;
-    return;
-  }
+  const filtered = items.filter(i=>{
+    if(!q) return true;
+    const model = (i.model||"").toLowerCase();
+    const type = normalizeArabicText(i.type||"");
+    return model.includes(q) || type.includes(q) || similarity(q, model) >= 0.72 || similarity(q, type) >= 0.72;
+  });
 
   filtered.forEach(i=>{
-    const isLow = (i.count ?? 0) < settings.lowThreshold;
+    const isLow = (i.count ?? 0) < 5;
     grid.innerHTML += `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 relative border-t-4 ${isLow ? 'border-red-500' : 'border-green-500'} card-hover">
-        ${isLow ? '<div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full"><i class="fas fa-exclamation-triangle"></i> ناقص</div>' : ''}
-        
-        <img src="${i.img}" class="w-full h-32 object-cover rounded-lg bg-gray-100 mb-3 cursor-pointer hover:opacity-80 transition" 
-          alt="img" 
-          onerror="this.src='https://placehold.co/300/cccccc/666666?text=NO+IMAGE'"
-          onclick="showItemDetails('${i.model}')">
-        
-        <div class="flex justify-between items-start mb-2">
-          <div class="flex-1">
-            <h3 class="font-bold text-lg text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-              <i class="fas fa-tag"></i>
-              ${escapeHtml(i.type||'')}
-            </p>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-3 relative border-t-4 ${isLow ? 'border-red-500' : 'border-green-500'}">
+        <img src="${i.img}" class="w-full h-24 object-cover rounded bg-gray-100 mb-2" alt="img">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="font-bold text-gray-800 dark:text-white">${escapeHtml((i.model||'').toUpperCase())}</h3>
+            <p class="text-xs text-gray-500">${escapeHtml(i.type||'')}</p>
           </div>
-          <span class="text-2xl font-black ${isLow ? 'text-red-600' : 'text-green-600'}">${escapeHtml(i.count)}</span>
+          <span class="text-lg font-bold text-primary">${escapeHtml(i.count)}</span>
         </div>
 
         ${currentUser?.role !== 'viewer' ? `
-        <div class="mt-3 flex justify-end gap-2 border-t pt-3 dark:border-gray-700">
-          <button onclick="editItem('${i.model}')" class="flex-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 py-2 rounded-lg hover:bg-blue-200 transition text-sm font-medium" title="تعديل">
-            <i class="fas fa-edit ml-1"></i> تعديل
-          </button>
-          ${currentUser?.role === 'admin' ? `
-          <button onclick="delItem('${i.model}')" class="bg-red-100 dark:bg-red-900/30 text-red-600 px-3 py-2 rounded-lg hover:bg-red-200 transition" title="حذف">
-            <i class="fas fa-trash"></i>
-          </button>` : ''}
+        <div class="mt-2 flex justify-end gap-2 border-t pt-2 dark:border-gray-700">
+          <button onclick="editItem('${i.model}')" class="text-blue-500 text-sm" title="تعديل"><i class="fas fa-edit"></i></button>
+          ${currentUser?.role === 'admin' ? `<button onclick="delItem('${i.model}')" class="text-red-500 text-sm" title="حذف"><i class="fas fa-trash"></i></button>` : ''}
         </div>` : ''}
       </div>`;
   });
-  
-  updateQuickStats();
 }
 
-function filterByType(type) {
-  currentFilter = type;
-  
-  // Update button styles
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.remove('bg-primary', 'text-white');
-    btn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
-  });
-  
-  event.target.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
-  event.target.classList.add('bg-primary', 'text-white');
-  
-  renderInventory();
-  logHistory('filter', `تصفية حسب: ${type}`);
-}
-
-function showItemDetails(model) {
-  if (!db) return;
-  
-  db.transaction("inventory","readonly").objectStore("inventory").get(model).onsuccess = e => {
-    const item = e.target.result;
-    if (!item) return;
-    
-    const isLow = (item.count ?? 0) < settings.lowThreshold;
-    
-    const details = `
-      <div class="text-center">
-        <img src="${item.img}" class="w-48 h-48 object-cover rounded-xl mx-auto mb-4 shadow-lg" onerror="this.src='https://placehold.co/300/cccccc/666666?text=NO+IMAGE'">
-        <h3 class="text-2xl font-black mb-2">${escapeHtml(item.model.toUpperCase())}</h3>
-        <p class="text-gray-600 dark:text-gray-400 mb-4">${escapeHtml(item.type)}</p>
-        <div class="text-4xl font-black ${isLow ? 'text-red-600' : 'text-green-600'} mb-2">${item.count}</div>
-        <p class="text-sm text-gray-500">${isLow ? '⚠️ المخزون منخفض' : '✅ المخزون جيد'}</p>
-      </div>
-    `;
-    
-    speak(`الموديل ${item.model.toUpperCase()}. النوع ${item.type}. الكمية ${item.count}.`);
-    addMsg('ai', details);
-    switchTab('chat');
-  };
-}
-
-function openAddModal(){ 
-  $("m-model").value = "";
-  $("m-type").value = "طاولة وسط";
-  $("m-count").value = "";
-  $("m-img").value = "";
-  $("img-preview").innerHTML = `
-    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-    <p class="text-xs text-gray-500">اضغط لرفع صورة</p>
-  `;
-  $("modal-form").classList.remove("hidden"); 
-}
-
-function closeModal(){ 
-  $("modal-form").classList.add("hidden"); 
-}
-
-function previewImage() {
-  const file = $("m-img").files[0];
-  if (!file) return;
-  
-  const reader = new FileReader();
-  reader.onload = e => {
-    $("img-preview").innerHTML = `
-      <img src="${e.target.result}" class="w-full h-32 object-cover rounded-lg">
-      <p class="text-xs text-green-600 mt-2"><i class="fas fa-check"></i> تم اختيار الصورة</p>
-    `;
-  };
-  reader.readAsDataURL(file);
-}
+function openAddModal(){ $("modal-form").classList.remove("hidden"); }
+function closeModal(){ $("modal-form").classList.add("hidden"); }
 
 function saveItem(){
   const model = ($("m-model").value || "").trim().toLowerCase();
@@ -1901,928 +1167,94 @@ function saveItem(){
   const count = parseInt($("m-count").value, 10);
   const imgInput = $("m-img");
 
-  if(!model || Number.isNaN(count)) {
-    showToast('البيانات ناقصة', 'error');
-    return;
-  }
+  if(!model || Number.isNaN(count)) return alert("البيانات ناقصة");
 
   const reader = new FileReader();
   reader.onload = e=>{
-    const img = imgInput.files[0] ? e.target.result : `https://placehold.co/300/${Math.floor(Math.random()*16777215).toString(16)}/ffffff?text=${model.toUpperCase()}`;
+    const img = imgInput.files[0] ? e.target.result : `https://placehold.co/150/png?text=${model.toUpperCase()}`;
     const tx = db.transaction("inventory","readwrite");
-    const item = { 
-      model, 
-      type, 
-      count, 
-      img,
-      addedDate: new Date().toISOString(),
-      lastModified: new Date().toISOString()
-    };
-    
-    tx.objectStore("inventory").put(item);
-    tx.oncomplete = ()=>{ 
-      closeModal(); 
-      renderInventory(); 
-      updateStats();
-      updateQuickStats();
-      checkLowStockAlerts();
-      
-      showToast(`تم حفظ ${model.toUpperCase()} بنجاح`, 'success');
-      speak(`تم حفظ الموديل ${model.toUpperCase()}.`);
-      logHistory('inventory', `حفظ منتج: ${model.toUpperCase()}`);
-    };
+    tx.objectStore("inventory").put({ model, type, count, img });
+    tx.oncomplete = ()=>{ closeModal(); renderInventory(); updateStats(); speak("تم الحفظ."); };
   };
-  
-  if(imgInput.files[0]) {
-    reader.readAsDataURL(imgInput.files[0]);
-  } else {
-    reader.onload({target:{result:null}});
-  }
+  if(imgInput.files[0]) reader.readAsDataURL(imgInput.files[0]);
+  else reader.onload({target:{result:null}});
 }
 
 function delItem(model){
-  if(!confirm(`هل تريد حذف ${model.toUpperCase()}؟`)) return;
-  
+  if(!confirm("حذف هذا المنتج؟")) return;
   const tx = db.transaction("inventory","readwrite");
   tx.objectStore("inventory").delete(model);
-  tx.oncomplete = ()=>{ 
-    renderInventory(); 
-    updateStats();
-    updateQuickStats();
-    
-    showToast(`تم حذف ${model.toUpperCase()}`, 'success');
-    logHistory('inventory', `حذف منتج: ${model.toUpperCase()}`);
-  };
+  tx.oncomplete = ()=>{ renderInventory(); updateStats(); };
 }
 
 function editItem(model){
   db.transaction("inventory","readonly").objectStore("inventory").get(model).onsuccess = e=>{
     const i = e.target.result;
     if(!i) return;
-    
     $("m-model").value = i.model;
     $("m-type").value = i.type;
     $("m-count").value = i.count;
-    
-    if (i.img) {
-      $("img-preview").innerHTML = `
-        <img src="${i.img}" class="w-full h-32 object-cover rounded-lg">
-        <p class="text-xs text-blue-600 mt-2">الصورة الحالية</p>
-      `;
-    }
-    
     openAddModal();
-    logHistory('inventory', `تعديل منتج: ${model.toUpperCase()}`);
   };
 }
 
-/* ========================================
-   STATISTICS & CHARTS
-======================================== */
-async function updateQuickStats() {
-  const items = await getAll();
-  const total = items.length;
-  const low = items.filter(i => (i.count ?? 0) < settings.lowThreshold).length;
-  
-  const totalEl = $("quick-total");
-  const lowEl = $("quick-low");
-  
-  if (totalEl) animateCounter(totalEl, total);
-  if (lowEl) animateCounter(lowEl, low);
-}
-
-function animateCounter(element, target) {
-  const current = parseInt(element.textContent) || 0;
-  const increment = target > current ? 1 : -1;
-  const duration = 500;
-  const steps = Math.abs(target - current);
-  const stepDuration = steps > 0 ? duration / steps : 0;
-  
-  let count = current;
-  const timer = setInterval(() => {
-    count += increment;
-    element.textContent = count;
-    
-    if (count === target) {
-      clearInterval(timer);
-    }
-  }, stepDuration);
-}
-
+/* =========================
+   12) Stats + export
+========================= */
 async function updateStats(){
   const items = await getAll();
   const types = {};
-  const quantities = {};
   const low = [];
 
   items.forEach(i=>{
     const t = i.type || "غير مصنف";
-    types[t] = (types[t]||0) + 1;
-    quantities[t] = (quantities[t]||0) + (i.count||0);
-    
-    if((i.count||0) < settings.lowThreshold) low.push(i);
+    types[t] = (types[t]||0) + (i.count||0);
+    if((i.count||0) < 5) low.push(i);
   });
 
-  // Update summary cards
-  $("stat-total").textContent = items.length;
-  $("stat-quantity").textContent = items.reduce((sum, i) => sum + (i.count || 0), 0);
-  $("stat-low").textContent = low.length;
-  $("stat-types").textContent = Object.keys(types).length;
-
-  // Type distribution chart
   if(chartInstance) chartInstance.destroy();
   if($("typeChart")){
     chartInstance = new Chart($("typeChart"), {
       type: 'doughnut',
-      data: { 
-        labels: Object.keys(types),
-        datasets: [{
-          data: Object.values(types),
-          backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6'],
-          borderWidth: 0
-        }]
+      data: { labels: Object.keys(types),
+        datasets: [{ data: Object.values(types), backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6'] }]
       },
-      options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }
+      options: { responsive:true, maintainAspectRatio:false }
     });
   }
 
-  // Quantity chart
-  if(quantityChartInstance) quantityChartInstance.destroy();
-  if($("quantityChart")){
-    quantityChartInstance = new Chart($("quantityChart"), {
-      type: 'bar',
-      data: { 
-        labels: Object.keys(quantities),
-        datasets: [{
-          label: 'الكمية',
-          data: Object.values(quantities),
-          backgroundColor: '#3b82f6',
-          borderRadius: 8
-        }]
-      },
-      options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
-
-  // Stock alerts
   const alerts = $("stock-alerts");
   if(alerts){
-    alerts.innerHTML = low.length ? "" : '<p class="text-green-500 text-sm flex items-center gap-2"><i class="fas fa-check-circle"></i> المخزون ممتاز، لا توجد نواقص</p>';
+    alerts.innerHTML = low.length ? "" : '<p class="text-green-500 text-sm">المخزون ممتاز</p>';
     low.forEach(i=>{
-      alerts.innerHTML += `
-        <div class="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/30 text-red-600 rounded-lg text-sm hover:bg-red-100 dark:hover:bg-red-900/40 transition cursor-pointer" onclick="showItemDetails('${i.model}')">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span class="font-medium">${escapeHtml(i.model.toUpperCase())}</span>
-            <span class="text-xs text-gray-500">— ${escapeHtml(i.type)}</span>
-          </div>
-          <b class="text-lg">${escapeHtml(i.count)}</b>
-        </div>`;
+      alerts.innerHTML += `<div class="flex justify-between p-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded text-sm">
+        <span>${escapeHtml(i.model)}</span><b>${escapeHtml(i.count)}</b>
+      </div>`;
     });
   }
 }
 
-/* ========================================
-   HISTORY LOG (NEW)
-======================================== */
-function logHistory(type, description) {
-  if (!db) return;
-  
-  const tx = db.transaction("history", "readwrite");
-  tx.objectStore("history").add({
-    type,
-    description,
-    user: currentUser?.name || 'غير معروف',
-    date: new Date().toISOString()
-  });
-}
-
-async function loadHistory() {
-  if (!db) return;
-  
-  const tx = db.transaction("history", "readonly");
-  const index = tx.objectStore("history").index("date");
-  
-  index.openCursor(null, 'prev').onsuccess = e => {
-    const cursor = e.target.result;
-    const list = $("history-list");
-    if (!list) return;
-    
-    if (!cursor) {
-      if (list.innerHTML === "") {
-        list.innerHTML = `
-          <div class="text-center py-12">
-            <i class="fas fa-history text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-            <p class="text-gray-500 dark:text-gray-400">لا يوجد سجل حركات</p>
-          </div>
-        `;
-      }
-      return;
-    }
-    
-    if (list.innerHTML.includes('لا يوجد سجل')) {
-      list.innerHTML = "";
-    }
-    
-    const record = cursor.value;
-    const date = new Date(record.date);
-    const timeStr = date.toLocaleString('ar-SA', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    
-    const icons = {
-      login: 'fa-sign-in-alt text-green-500',
-      logout: 'fa-sign-out-alt text-red-500',
-      chat: 'fa-comments text-blue-500',
-      inventory: 'fa-boxes text-purple-500',
-      export: 'fa-download text-yellow-500',
-      filter: 'fa-filter text-indigo-500',
-      navigation: 'fa-compass text-pink-500',
-      theme: 'fa-moon text-gray-500'
-    };
-    
-    const icon = icons[record.type] || 'fa-circle text-gray-400';
-    
-    list.innerHTML += `
-      <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm flex items-start gap-3 hover:shadow-md transition">
-        <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center shrink-0">
-          <i class="fas ${icon}"></i>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="font-medium text-gray-800 dark:text-white">${escapeHtml(record.description)}</p>
-          <div class="flex items-center gap-3 mt-1 text-xs text-gray-500 dark:text-gray-400">
-            <span><i class="fas fa-user ml-1"></i>${escapeHtml(record.user)}</span>
-            <span><i class="fas fa-clock ml-1"></i>${timeStr}</span>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    cursor.continue();
-  };
-}
-
-function clearHistory() {
-  if (!confirm('هل تريد مسح سجل الحركات؟')) return;
-  
-  const tx = db.transaction("history", "readwrite");
-  tx.objectStore("history").clear();
-  tx.oncomplete = () => {
-    $("history-list").innerHTML = `
-      <div class="text-center py-12">
-        <i class="fas fa-history text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-        <p class="text-gray-500 dark:text-gray-400">لا يوجد سجل حركات</p>
-      </div>
-    `;
-    showToast('تم مسح السجل', 'success');
-  };
-}
-
-/* ========================================
-   EXPORT & REPORTS
-======================================== */
 async function exportExcel(){
   const items = await getAll();
-  const data = items.map(i => ({
-    'الموديل': i.model.toUpperCase(),
-    'النوع': i.type,
-    'الكمية': i.count,
-    'الحالة': (i.count ?? 0) < settings.lowThreshold ? 'ناقص' : 'جيد'
-  }));
-  
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "المخزون");
-  XLSX.writeFile(wb, `warehouse-${Date.now()}.xlsx`);
-  
-  showToast('تم تصدير Excel بنجاح', 'success');
-  logHistory('export', 'تصدير Excel');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(items), "Inventory");
+  XLSX.writeFile(wb, "Warehouse.xlsx");
 }
 
-/* ========================================
-   EXPORT & REPORTS (تابع)
-======================================== */
 function exportChatPDF(){
-  const chatBox = $("chat-box");
-  if (!chatBox) return;
-  
-  showToast('جاري إنشاء PDF...', 'info', 2000);
-  
-  html2canvas(chatBox, { scale: 2 }).then(canvas => {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    
-    const imgData = canvas.toDataURL('image/png');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    
-    let heightLeft = pdfHeight;
-    let position = 0;
-    
-    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-    heightLeft -= pdf.internal.pageSize.getHeight();
-    
-    while (heightLeft >= 0) {
-      position = heightLeft - pdfHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
-    }
-    
-    pdf.save(`chat-${Date.now()}.pdf`);
-    showToast('تم إنشاء PDF بنجاح', 'success');
-    logHistory('export', 'تصدير محادثات PDF');
-  }).catch(err => {
-    console.error('PDF Error:', err);
-    showToast('خطأ في إنشاء PDF', 'error');
+  html2canvas($("chat-box")).then(c=>{
+    const pdf = new window.jspdf.jsPDF();
+    const img = c.toDataURL('image/png');
+    const props = pdf.getImageProperties(img);
+    const w = pdf.internal.pageSize.getWidth();
+    const h = (props.height * w) / props.width;
+    pdf.addImage(img, 'PNG', 0, 0, w, h);
+    pdf.save("chat.pdf");
   });
 }
-
 function shareWhatsApp(){
-  const text = "تقرير نظام المستودع الذكي\n\nتم إنشاء التقرير بنجاح ✅";
-  window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
-  logHistory('export', 'مشاركة واتساب');
+  window.open("https://wa.me/?text=" + encodeURIComponent("تقرير المستودع جاهز"), "_blank");
 }
-
-async function printInventory() {
-  const items = await getAll();
-  const printArea = $("print-area");
-  
-  let html = `
-    <div style="font-family: 'Tajawal', Arial, sans-serif; padding: 20px; direction: rtl;">
-      <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #2563eb; padding-bottom: 20px;">
-        <h1 style="font-size: 32px; color: #2563eb; margin: 0;">📦 نظام المستودع الذكي</h1>
-        <p style="color: #666; margin: 10px 0;">تقرير المخزون الكامل</p>
-        <p style="color: #999; font-size: 14px;">التاريخ: ${new Date().toLocaleDateString('ar-SA')}</p>
-      </div>
-      
-      <div style="margin-bottom: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-        <div style="background: #eff6ff; padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 14px; color: #666;">إجمالي المنتجات</div>
-          <div style="font-size: 28px; font-weight: bold; color: #2563eb;">${items.length}</div>
-        </div>
-        <div style="background: #f0fdf4; padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 14px; color: #666;">إجمالي الكمية</div>
-          <div style="font-size: 28px; font-weight: bold; color: #10b981;">${items.reduce((s,i)=>s+(i.count||0),0)}</div>
-        </div>
-        <div style="background: #fef2f2; padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 14px; color: #666;">نواقص</div>
-          <div style="font-size: 28px; font-weight: bold; color: #ef4444;">${items.filter(i=>(i.count||0)<settings.lowThreshold).length}</div>
-        </div>
-      </div>
-      
-      <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead>
-          <tr style="background: #2563eb; color: white;">
-            <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">#</th>
-            <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">الموديل</th>
-            <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">النوع</th>
-            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">الكمية</th>
-            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">الحالة</th>
-          </tr>
-        </thead>
-        <tbody>
-  `;
-  
-  items.forEach((item, idx) => {
-    const isLow = (item.count ?? 0) < settings.lowThreshold;
-    html += `
-      <tr style="background: ${idx % 2 === 0 ? '#f9fafb' : 'white'};">
-        <td style="padding: 10px; border: 1px solid #ddd;">${idx + 1}</td>
-        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">${escapeHtml(item.model.toUpperCase())}</td>
-        <td style="padding: 10px; border: 1px solid #ddd;">${escapeHtml(item.type)}</td>
-        <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; color: ${isLow ? '#ef4444' : '#10b981'};">${item.count}</td>
-        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-          <span style="background: ${isLow ? '#fee2e2' : '#d1fae5'}; color: ${isLow ? '#991b1b' : '#065f46'}; padding: 4px 12px; border-radius: 20px; font-size: 12px;">
-            ${isLow ? '⚠️ ناقص' : '✅ جيد'}
-          </span>
-        </td>
-      </tr>
-    `;
-  });
-  
-  html += `
-        </tbody>
-      </table>
-      
-      <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; text-align: center; color: #999; font-size: 12px;">
-        <p>تم الإنشاء بواسطة: ${currentUser?.name || 'النظام'} | ${new Date().toLocaleString('ar-SA')}</p>
-        <p>نظام المستودع الذكي Pro V9 - Ultimate Edition</p>
-      </div>
-    </div>
-  `;
-  
-  printArea.innerHTML = html;
-  printArea.classList.remove('hidden');
-  
-  setTimeout(() => {
-    window.print();
-    printArea.classList.add('hidden');
-    printArea.innerHTML = '';
-  }, 500);
-  
-  logHistory('export', 'طباعة المخزون');
-}
-
-/* ========================================
-   ADVANCED REPORTS (NEW)
-======================================== */
-async function generateFullReport() {
-  const items = await getAll();
-  
-  showToast('جاري إنشاء التقرير الشامل...', 'info', 2000);
-  
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  
-  // Header
-  pdf.setFontSize(24);
-  pdf.setTextColor(37, 99, 235);
-  pdf.text('نظام المستودع الذكي', 105, 20, { align: 'center' });
-  
-  pdf.setFontSize(16);
-  pdf.setTextColor(100, 100, 100);
-  pdf.text('التقرير الشامل', 105, 30, { align: 'center' });
-  
-  pdf.setFontSize(10);
-  pdf.text(`التاريخ: ${new Date().toLocaleDateString('ar-SA')}`, 105, 38, { align: 'center' });
-  pdf.text(`المستخدم: ${currentUser?.name || 'غير معروف'}`, 105, 44, { align: 'center' });
-  
-  // Summary
-  let y = 55;
-  pdf.setFontSize(14);
-  pdf.setTextColor(0, 0, 0);
-  pdf.text('ملخص المخزون:', 20, y);
-  
-  y += 10;
-  pdf.setFontSize(11);
-  pdf.text(`• إجمالي المنتجات: ${items.length}`, 25, y);
-  y += 7;
-  pdf.text(`• إجمالي الكمية: ${items.reduce((s,i)=>s+(i.count||0),0)}`, 25, y);
-  y += 7;
-  const lowCount = items.filter(i=>(i.count||0)<settings.lowThreshold).length;
-  pdf.text(`• النواقص: ${lowCount}`, 25, y);
-  
-  // Table
-  y += 15;
-  pdf.setFontSize(12);
-  pdf.text('تفاصيل المنتجات:', 20, y);
-  
-  y += 10;
-  pdf.setFontSize(9);
-  
-  // Table header
-  pdf.setFillColor(37, 99, 235);
-  pdf.setTextColor(255, 255, 255);
-  pdf.rect(20, y - 5, 170, 8, 'F');
-  pdf.text('#', 25, y);
-  pdf.text('الموديل', 45, y);
-  pdf.text('النوع', 85, y);
-  pdf.text('الكمية', 135, y);
-  pdf.text('الحالة', 165, y);
-  
-  y += 10;
-  pdf.setTextColor(0, 0, 0);
-  
-  items.forEach((item, idx) => {
-    if (y > 270) {
-      pdf.addPage();
-      y = 20;
-    }
-    
-    const isLow = (item.count ?? 0) < settings.lowThreshold;
-    
-    pdf.text(`${idx + 1}`, 25, y);
-    pdf.text(item.model.toUpperCase(), 45, y);
-    pdf.text(item.type, 85, y);
-    pdf.text(`${item.count}`, 135, y);
-    pdf.setTextColor(isLow ? 239 : 16, isLow ? 68 : 185, isLow ? 68 : 129);
-    pdf.text(isLow ? 'ناقص' : 'جيد', 165, y);
-    pdf.setTextColor(0, 0, 0);
-    
-    y += 8;
-  });
-  
-  // Footer
-  pdf.setFontSize(8);
-  pdf.setTextColor(150, 150, 150);
-  const pageCount = pdf.internal.getNumberOfPages();
-  for (let i = 1; i <= pageCount; i++) {
-    pdf.setPage(i);
-    pdf.text(`صفحة ${i} من ${pageCount}`, 105, 290, { align: 'center' });
-  }
-  
-  pdf.save(`full-report-${Date.now()}.pdf`);
-  showToast('تم إنشاء التقرير بنجاح', 'success');
-  logHistory('export', 'تقرير شامل PDF');
-}
-
-async function generateLowStockReport() {
-  const items = await getAll();
-  const lowItems = items.filter(i => (i.count ?? 0) < settings.lowThreshold);
-  
-  if (lowItems.length === 0) {
-    showToast('لا توجد نواقص! المخزون ممتاز', 'success');
-    return;
-  }
-  
-  showToast('جاري إنشاء تقرير النواقص...', 'info', 2000);
-  
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  
-  // Header
-  pdf.setFontSize(24);
-  pdf.setTextColor(239, 68, 68);
-  pdf.text('⚠️ تقرير النواقص', 105, 20, { align: 'center' });
-  
-  pdf.setFontSize(12);
-  pdf.setTextColor(100, 100, 100);
-  pdf.text(`التاريخ: ${new Date().toLocaleDateString('ar-SA')}`, 105, 30, { align: 'center' });
-  pdf.text(`عدد المنتجات الناقصة: ${lowItems.length}`, 105, 38, { align: 'center' });
-  
-  let y = 55;
-  pdf.setFontSize(10);
-  pdf.setTextColor(0, 0, 0);
-  
-  // Alert box
-  pdf.setFillColor(254, 226, 226);
-  pdf.rect(20, y - 5, 170, 15, 'F');
-  pdf.setTextColor(153, 27, 27);
-  pdf.text('تنبيه: المنتجات التالية تحتاج إعادة طلب فوري', 25, y + 3);
-  
-  y += 20;
-  
-  // Table header
-  pdf.setFillColor(239, 68, 68);
-  pdf.setTextColor(255, 255, 255);
-  pdf.rect(20, y - 5, 170, 8, 'F');
-  pdf.text('#', 25, y);
-  pdf.text('الموديل', 50, y);
-  pdf.text('النوع', 100, y);
-  pdf.text('الكمية الحالية', 150, y);
-  
-  y += 10;
-  pdf.setTextColor(0, 0, 0);
-  
-  lowItems.forEach((item, idx) => {
-    if (y > 270) {
-      pdf.addPage();
-      y = 20;
-    }
-    
-    pdf.text(`${idx + 1}`, 25, y);
-    pdf.text(item.model.toUpperCase(), 50, y);
-    pdf.text(item.type, 100, y);
-    pdf.setTextColor(239, 68, 68);
-    pdf.setFont(undefined, 'bold');
-    pdf.text(`${item.count}`, 150, y);
-    pdf.setFont(undefined, 'normal');
-    pdf.setTextColor(0, 0, 0);
-    
-    y += 8;
-  });
-  
-  // Recommendations
-  y += 10;
-  pdf.setFontSize(12);
-  pdf.setTextColor(37, 99, 235);
-  pdf.text('التوصيات:', 20, y);
-  
-  y += 8;
-  pdf.setFontSize(10);
-  pdf.setTextColor(0, 0, 0);
-  pdf.text('• يُنصح بإعادة طلب المنتجات المذكورة أعلاه', 25, y);
-  y += 6;
-  pdf.text('• تحديث الكميات بعد استلام الطلبيات', 25, y);
-  y += 6;
-  pdf.text('• مراجعة حد التنبيه من الإعدادات', 25, y);
-  
-  pdf.save(`low-stock-report-${Date.now()}.pdf`);
-  showToast('تم إنشاء تقرير النواقص', 'success');
-  logHistory('export', 'تقرير نواقص PDF');
-}
-
-async function generateValueReport() {
-  showToast('هذه الميزة قيد التطوير', 'info', 3000);
-  // يمكن إضافة حساب قيمة المخزون لاحقاً
-}
-
-async function generateBarcodeSheet() {
-  const items = await getAll();
-  
-  if (items.length === 0) {
-    showToast('لا توجد منتجات لإنشاء باركود', 'warning');
-    return;
-  }
-  
-  showToast('جاري إنشاء ورقة الباركود...', 'info', 2000);
-  
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  
-  pdf.setFontSize(18);
-  pdf.setTextColor(37, 99, 235);
-  pdf.text('باركود المنتجات', 105, 15, { align: 'center' });
-  
-  let x = 20;
-  let y = 30;
-  const itemsPerRow = 2;
-  const itemWidth = 85;
-  const itemHeight = 40;
-  
-  items.forEach((item, idx) => {
-    if (y > 260) {
-      pdf.addPage();
-      y = 20;
-      x = 20;
-    }
-    
-    // Box
-    pdf.setDrawColor(200, 200, 200);
-    pdf.rect(x, y, itemWidth, itemHeight);
-    
-    // Product info
-    pdf.setFontSize(12);
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(item.model.toUpperCase(), x + 5, y + 8);
-    
-    pdf.setFontSize(9);
-    pdf.setTextColor(100, 100, 100);
-    pdf.text(item.type, x + 5, y + 14);
-    
-    // Barcode placeholder (يمكن استخدام مكتبة JsBarcode لإنشاء باركود حقيقي)
-    pdf.setFillColor(0, 0, 0);
-    for (let i = 0; i < 30; i++) {
-      const barWidth = Math.random() > 0.5 ? 1 : 0.5;
-      pdf.rect(x + 5 + (i * 2.5), y + 20, barWidth, 12, 'F');
-    }
-    
-    pdf.setFontSize(8);
-    pdf.text(item.model.toUpperCase(), x + itemWidth / 2, y + 36, { align: 'center' });
-    
-    x += itemWidth + 10;
-    
-    if ((idx + 1) % itemsPerRow === 0) {
-      x = 20;
-      y += itemHeight + 5;
-    }
-  });
-  
-  pdf.save(`barcodes-${Date.now()}.pdf`);
-  showToast('تم إنشاء ورقة الباركود', 'success');
-  logHistory('export', 'طباعة باركود');
-}
-
-/* ========================================
-   DATA BACKUP & RESTORE (NEW)
-======================================== */
-async function backupData() {
-  try {
-    const inventory = await getAll();
-    
-    const backup = {
-      version: '9.0',
-      date: new Date().toISOString(),
-      user: currentUser?.name || 'unknown',
-      inventory: inventory,
-      settings: settings
-    };
-    
-    const dataStr = JSON.stringify(backup, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `warehouse-backup-${Date.now()}.json`;
-    a.click();
-    
-    URL.revokeObjectURL(url);
-    
-    showToast('تم إنشاء النسخة الاحتياطية بنجاح', 'success');
-    logHistory('backup', 'إنشاء نسخة احتياطية');
-  } catch (err) {
-    console.error('Backup error:', err);
-    showToast('خطأ في إنشاء النسخة الاحتياطية', 'error');
-  }
-}
-
-async function exportAllData() {
-  await backupData();
-}
-
-function importData() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
-  
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    try {
-      const text = await file.text();
-      const backup = JSON.parse(text);
-      
-      if (!backup.inventory || !Array.isArray(backup.inventory)) {
-        throw new Error('Invalid backup file');
-      }
-      
-      if (!confirm(`هل تريد استيراد ${backup.inventory.length} منتج؟\n\nتحذير: سيتم استبدال البيانات الحالية!`)) {
-        return;
-      }
-      
-      // Clear current data
-      const tx = db.transaction("inventory", "readwrite");
-      const store = tx.objectStore("inventory");
-      await store.clear();
-      
-      // Import new data
-      backup.inventory.forEach(item => {
-        store.add(item);
-      });
-      
-      tx.oncomplete = () => {
-        renderInventory();
-        updateStats();
-        updateQuickStats();
-        
-        showToast(`تم استيراد ${backup.inventory.length} منتج بنجاح`, 'success');
-        logHistory('import', `استيراد ${backup.inventory.length} منتج`);
-      };
-      
-    } catch (err) {
-      console.error('Import error:', err);
-      showToast('خطأ في استيراد البيانات. تأكد من الملف', 'error');
-    }
-  };
-  
-  input.click();
-}
-
-/* ========================================
-   INITIALIZATION
-======================================== */
-document.addEventListener('DOMContentLoaded', () => {
-  // Check for saved theme
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    document.documentElement.classList.add('dark');
-  }
-  
-  // Save theme on change
-  const observer = new MutationObserver(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
-  
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-  
-  // Keyboard shortcuts
-  document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + K: Focus search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      const search = $('inventory-search');
-      if (search) {
-        search.focus();
-        switchTab('inventory');
-      }
-    }
-    
-    // Ctrl/Cmd + /: Focus chat
-    if ((e.ctrlKey || e.metaKey) && e.key === '/') {
-      e.preventDefault();
-      const chatInput = $('chat-input');
-      if (chatInput) {
-        chatInput.focus();
-        switchTab('chat');
-      }
-    }
-    
-    // Escape: Close modals
-    if (e.key === 'Escape') {
-      closeModal();
-      closeSettings();
-    }
-  });
-  
-  console.log('%c🚀 نظام المستودع الذكي V9 - Ultimate Edition', 'font-size: 20px; color: #2563eb; font-weight: bold;');
-  console.log('%c✨ تم التحميل بنجاح', 'font-size: 14px; color: #10b981;');
-});
-
-// Service Worker for offline support (optional)
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // يمكن تفعيل Service Worker للعمل بدون إنترنت
-    // navigator.serviceWorker.register('/sw.js');
-  });
-}
-
-/* ========================================
-   PERFORMANCE OPTIMIZATION
-======================================== */
-// Debounce function for search
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-// Apply debounce to search
-const searchInput = $('inventory-search');
-if (searchInput) {
-  const debouncedRender = debounce(renderInventory, 300);
-  searchInput.addEventListener('input', debouncedRender);
-}
-
-/* ========================================
-   ERROR HANDLING
-======================================== */
-window.addEventListener('error', (e) => {
-  console.error('Global error:', e.error);
-  showToast('حدث خطأ غير متوقع', 'error');
-});
-
-window.addEventListener('unhandledrejection', (e) => {
-  console.error('Unhandled promise rejection:', e.reason);
-  showToast('حدث خطأ في العملية', 'error');
-});
-
-/* ========================================
-   ANALYTICS & TRACKING (Optional)
-======================================== */
-function trackEvent(category, action, label) {
-  // يمكن إضافة Google Analytics أو أي نظام تتبع آخر
-  console.log(`Event: ${category} - ${action} - ${label}`);
-}
-
-/* ========================================
-   EASTER EGG 🎉
-======================================== */
-let konamiCode = [];
-const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-
-document.addEventListener('keydown', (e) => {
-  konamiCode.push(e.key);
-  konamiCode = konamiCode.slice(-10);
-  
-  if (konamiCode.join(',') === konamiSequence.join(',')) {
-    showToast('🎉 مبروك! اكتشفت الكود السري!', 'success', 5000);
-    speak('مبروك! لقد اكتشفت الكود السري. أنت مستخدم محترف!');
-    
-    // Add some fun animation
-    document.body.style.animation = 'rainbow 2s linear infinite';
-    setTimeout(() => {
-      document.body.style.animation = '';
-    }, 5000);
-  }
-});
-
-// Rainbow animation for easter egg
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes rainbow {
-    0% { filter: hue-rotate(0deg); }
-    100% { filter: hue-rotate(360deg); }
-  }
-`;
-document.head.appendChild(style);
-
 </script>
 </body>
 </html>
