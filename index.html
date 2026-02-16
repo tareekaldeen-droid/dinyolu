@@ -405,7 +405,7 @@
         updateStats();
         initSpeech();
 
-        speak(`مرحباً بك يا أستاذ ${currentUser.name}، النظام جاهز لخدمتك.`);
+        speak(`مرحباً يا أستاذ ${currentUser.name}، النظام جاهز لخدمتك.`);
         setMicStatus(getMicSupportMessage(), false);
       } else {
         document.getElementById('login-error').classList.remove('hidden');
@@ -1159,4 +1159,5 @@
   </script>
 </body>
 </html>
+
 
